@@ -18,56 +18,93 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Responsive values
+    double logoRadius = screenWidth * 0.15;
+    if (logoRadius > 60) logoRadius = 60;
+    if (logoRadius < 40) logoRadius = 40;
+
+    double titleFontSize = screenWidth * 0.08;
+    if (titleFontSize > 32) titleFontSize = 32;
+    if (titleFontSize < 24) titleFontSize = 24;
+
+    double subtitleFontSize = screenWidth * 0.045;
+    if (subtitleFontSize > 16) subtitleFontSize = 16;
+    if (subtitleFontSize < 13) subtitleFontSize = 13;
+
+    double smallTextFontSize = screenWidth * 0.038;
+    if (smallTextFontSize > 14) smallTextFontSize = 14;
+    if (smallTextFontSize < 11) smallTextFontSize = 11;
+
+    double mainHorizontalPadding = screenWidth * 0.06;
+
+    double topSpacing = screenHeight * 0.08; // Adjusted from 0.1
+    if (topSpacing > 80) topSpacing = 80;
+    if (topSpacing < 30) topSpacing = 30;
+
+    double generalSpacing = screenHeight * 0.025; // For spacing like 20
+    if (generalSpacing > 25) generalSpacing = 25;
+    if (generalSpacing < 15) generalSpacing = 15;
+    
+    double betweenFieldsSpacing = screenHeight * 0.022; // For spacing between text fields
+     if (betweenFieldsSpacing > 20) betweenFieldsSpacing = 20;
+    if (betweenFieldsSpacing < 12) betweenFieldsSpacing = 12;
+
+
+    double formSectionSpacing = screenHeight * 0.04; // For spacing like 40
+    if (formSectionSpacing > 40) formSectionSpacing = 40;
+    if (formSectionSpacing < 25) formSectionSpacing = 25;
+
+
     return Scaffold(
       backgroundColor: AppColors.splashBackground,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            padding: EdgeInsets.symmetric(horizontal: mainHorizontalPadding),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 80),
+                SizedBox(height: topSpacing),
 
-                // --- CHANGE IS HERE ---
-                // The leaf icon has been replaced with your circular swisa_logo.png
-                const CircleAvatar(
-                  radius: 60, // A bit smaller than the splash screen's logo
+                CircleAvatar(
+                  radius: logoRadius,
                   backgroundColor: Colors.transparent,
-                  backgroundImage: AssetImage('assets/images/swisa_logo.png'),
+                  backgroundImage: const AssetImage('assets/images/swisa_logo.png'),
                 ),
-                // --- END OF CHANGE ---
 
-                const SizedBox(height: 20),
+                SizedBox(height: generalSpacing),
 
-                const Text(
+                Text(
                   'Login',
                   style: TextStyle(
-                    fontSize: 32,
+                    fontSize: titleFontSize,
                     fontWeight: FontWeight.bold,
                     color: AppColors.primaryGreen,
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                SizedBox(height: generalSpacing / 2), // Smaller spacing here
 
-                const Text(
+                Text(
                   'Login to your account.',
                   style: TextStyle(
                       color: AppColors.primaryGreen,
-                      fontSize: 16,
+                      fontSize: subtitleFontSize,
                       fontWeight: FontWeight.w500
                   ),
                 ),
 
-                const SizedBox(height: 40),
+                SizedBox(height: formSectionSpacing),
 
                 CustomTextField(
                   hintText: 'Email Address or Phone Number',
                   controller: _emailController,
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: betweenFieldsSpacing),
 
                 CustomTextField(
                   hintText: 'Password',
@@ -79,17 +116,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () { /* TODO: Implement forgot password */ },
-                    child: const Text(
+                    child: Text(
                         'Forgot password?',
                         style: TextStyle(
                             color: AppColors.primaryGreen,
-                            fontWeight: FontWeight.bold
+                            fontWeight: FontWeight.bold,
+                            fontSize: smallTextFontSize,
                         )
                     ),
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: generalSpacing),
 
                 CustomButton(
                   text: 'Login',
@@ -101,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
 
-                const SizedBox(height: 40),
+                SizedBox(height: formSectionSpacing),
 
                 TextButton(
                   onPressed: () {
@@ -112,23 +150,24 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Text.rich(
                     TextSpan(
                       text: 'Not registered? ',
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: AppColors.textColor,
-                          fontSize: 14
+                          fontSize: smallTextFontSize
                       ),
                       children: [
                         TextSpan(
                           text: 'Register now',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.primaryGreen,
                             fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                            fontSize: smallTextFontSize,
                           ),
                         ),
                       ],
                     ),
                   ),
-                )
+                ),
+                SizedBox(height: generalSpacing), // Added some padding at the bottom
               ],
             ),
           ),

@@ -24,7 +24,7 @@ class _ViewFileScreenState extends State<ViewFileScreen> {
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                child: _buildTwoImageDisplay(),
+                child: _buildTwoImageDisplay(context), // Pass context
               ),
             ),
             _buildBottomButtons(),
@@ -60,26 +60,28 @@ class _ViewFileScreenState extends State<ViewFileScreen> {
     );
   }
 
-  Widget _buildTwoImageDisplay() {
+  Widget _buildTwoImageDisplay(BuildContext context) { // Added context
     return Column(
       children: [
         Text(
           '${_isEditing ? 'EDIT' : 'VIEW'} ${widget.requirementTitle.toUpperCase()}',
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
-        _buildImagePlaceholder('FRONT'),
+        _buildImagePlaceholder(context, 'FRONT'), // Pass context
         const SizedBox(height: 16),
-        _buildImagePlaceholder('BACK'),
+        _buildImagePlaceholder(context, 'BACK'), // Pass context
       ],
     );
   }
 
-  Widget _buildImagePlaceholder(String label) {
+  Widget _buildImagePlaceholder(BuildContext context, String label) { // Added context
+    final screenHeight = MediaQuery.of(context).size.height;
     return Column(
       children: [
         Container(
-          height: 200,
+          height: screenHeight * 0.25, // Responsive height
           width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.grey[200],

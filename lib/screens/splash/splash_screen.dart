@@ -14,47 +14,45 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Navigate to the Login Screen after 3 seconds
     Timer(const Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
-      );
+      if (mounted) { // Check if the widget is still in the tree
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+        );
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Stack(
         children: [
-          // Layer 1: The light green background color fills the entire screen
           const Positioned.fill(
             child: DecoratedBox(
               decoration: BoxDecoration(color: AppColors.splashBackground),
             ),
           ),
-
-          // Layer 2: The white curved shape at the bottom
           Align(
             alignment: Alignment.bottomCenter,
             child: ClipPath(
               clipper: SplashScreenCurveClipper(),
               child: Container(
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: screenHeight * 0.5, // Already responsive
                 color: Colors.white,
               ),
             ),
           ),
-
-          // Layer 3: The content (Logos and Text)
           SafeArea(
             child: Center(
               child: Column(
                 children: [
                   const Spacer(flex: 2),
-                  _buildMainLogo(),
+                  _buildMainLogo(context), // Pass context
                   const Spacer(flex: 3),
-                  _buildPoweredBy(),
+                  _buildPoweredBy(context), // Pass context
                   const Spacer(flex: 1),
                 ],
               ),
@@ -65,31 +63,43 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Widget _buildMainLogo() {
+  Widget _buildMainLogo(BuildContext context) { // Added context
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    double logoRadius = screenWidth * 0.18;
+    logoRadius = logoRadius.clamp(60.0, 90.0);
+
+    double titleFontSize = screenWidth * 0.08;
+    titleFontSize = titleFontSize.clamp(28.0, 36.0);
+
+    double spacing = screenHeight * 0.02;
+    spacing = spacing.clamp(12.0, 20.0);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const CircleAvatar(
-          radius: 75,
+        CircleAvatar(
+          radius: logoRadius,
           backgroundColor: Colors.transparent,
-          backgroundImage: AssetImage('assets/images/swisa_logo.png'),
+          backgroundImage: const AssetImage('assets/images/swisa_logo.png'),
         ),
-        const SizedBox(height: 16),
-        const Text(
+        SizedBox(height: spacing),
+        Text(
           'SWISA',
           style: TextStyle(
             fontFamily: 'Poppins',
-            fontSize: 32,
+            fontSize: titleFontSize,
             fontWeight: FontWeight.bold,
             color: AppColors.primaryGreen,
             height: 1.0,
           ),
         ),
-        const Text(
+        Text(
           'AGAP',
           style: TextStyle(
             fontFamily: 'Poppins',
-            fontSize: 32,
+            fontSize: titleFontSize,
             fontWeight: FontWeight.bold,
             color: AppColors.primaryGreen,
             height: 1.0,
@@ -99,23 +109,36 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Widget _buildPoweredBy() {
+  Widget _buildPoweredBy(BuildContext context) { // Added context
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    double poweredByFontSize = screenWidth * 0.03;
+    poweredByFontSize = poweredByFontSize.clamp(10.0, 14.0);
+
+    double iconAvatarRadius = screenWidth * 0.06;
+    iconAvatarRadius = iconAvatarRadius.clamp(20.0, 30.0);
+    double iconSize = iconAvatarRadius * 0.9; // Icon slightly smaller than avatar radius
+
+    double spacing = screenHeight * 0.01;
+    spacing = spacing.clamp(6.0, 10.0);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text(
+        Text(
           'POWERED BY',
           style: TextStyle(
-            fontSize: 12,
+            fontSize: poweredByFontSize,
             color: AppColors.hintColor,
             fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 8),
-        const CircleAvatar(
-          radius: 25,
+        SizedBox(height: spacing),
+        CircleAvatar(
+          radius: iconAvatarRadius,
           backgroundColor: AppColors.cardBackground,
-          child: Icon(Icons.agriculture, color: AppColors.primaryGreen),
+          child: Icon(Icons.agriculture, color: AppColors.primaryGreen, size: iconSize),
         ),
       ],
     );
@@ -126,21 +149,15 @@ class SplashScreenCurveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final path = Path();
-    path.moveTo(0, size.height * 0.25);
-
-    // --- ADJUSTMENT IS HERE ---
-    // Changed the control point's y-value from a negative to a positive number.
-    // This makes the curve much more subtle.
+    path.moveTo(0, size.height * 0.25); 
     path.quadraticBezierTo(
-        size.width / 2, // Control point X (center)
-        size.height * 0.1,  // Control point Y (A positive value flattens the curve)
-        size.width,       // End point X (right side)
-        size.height * 0.25  // End point Y
+        size.width / 2, 
+        size.height * 0.1, 
+        size.width, 
+        size.height * 0.25  
     );
-
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
-
     path.close();
     return path;
   }

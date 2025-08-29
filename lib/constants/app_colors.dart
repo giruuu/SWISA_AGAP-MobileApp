@@ -10,6 +10,7 @@ class AppColors {
   static const Color cardBackground = Color(0xFFF5F5F5);
   static const Color splashBackground = Color(0xFFE0F2F1);
   static const Color grantCardBorder = Color(0xFF3F861E);
+  static const Color applyButtonGreen = Color(0xFF4C956C);
 
   // This material color swatch is also updated to match the new primaryGreen
   static const MaterialColor primaryMaterialColor = MaterialColor(

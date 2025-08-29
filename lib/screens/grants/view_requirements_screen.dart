@@ -278,61 +278,83 @@ class _ViewRequirementsScreenState extends State<ViewRequirementsScreen> {
 
   Widget _buildRequirementRow(BuildContext context, {required String name, required RequirementStatus status}) {
     bool isApproved = status == RequirementStatus.approved;
+    // final screenWidth = MediaQuery.of(context).size.width; // Can be used for more adjustments
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Row(
         children: [
           Expanded(
-            child: Text(name, style: const TextStyle(fontWeight: FontWeight.w500)),
+            flex: 3, // Give more space to the name
+            child: Text(name, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
           ),
-          const SizedBox(width: 16),
-          Icon(isApproved ? Icons.check_circle : Icons.cancel, color: isApproved ? Colors.green : Colors.red, size: 24),
-          const SizedBox(width: 16),
-          const Icon(Icons.file_present_rounded, color: Colors.deepPurple, size: 24),
-          const SizedBox(width: 16),
-          SizedBox(
-            width: 85,
+          const SizedBox(width: 8),
+          Icon(isApproved ? Icons.check_circle : Icons.cancel, color: isApproved ? Colors.green : Colors.red, size: 22), // Slightly smaller
+          const SizedBox(width: 8),
+          const Icon(Icons.file_present_rounded, color: Colors.deepPurple, size: 22), // Slightly smaller
+          const SizedBox(width: 8),
+          Expanded(
+            flex: 2,
             child: isApproved
-                ? _buildFileActionButton('VIEW FILE', Colors.blue.shade700, onTap: () {
+                ? _buildFileActionButton(context, 'VIEW FILE', Colors.blue.shade700, onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => ViewFileScreen(requirementTitle: name)),
               );
             })
-                : _buildFileActionButton('UPLOAD FILE', Colors.orange.shade700, onTap: () => _showUploadFileDialog(context)),
+                : _buildFileActionButton(context, 'UPLOAD FILE', Colors.orange.shade700, onTap: () => _showUploadFileDialog(context)),
           ),
-          const SizedBox(width: 8),
-          SizedBox(width: 85, child: _buildFileActionButton('DOWNLOAD', Colors.grey.shade600)),
+          const SizedBox(width: 4), // Reduced space between buttons
+          Expanded(
+            flex: 2,
+            child: _buildFileActionButton(context, 'DOWNLOAD', Colors.grey.shade600, onTap: () { /* TODO: Implement download */})
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildFileActionButton(String text, Color color, {VoidCallback? onTap}) {
+  Widget _buildFileActionButton(BuildContext context, String text, Color color, {VoidCallback? onTap}) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    double buttonFontSize = screenWidth < 360 ? 9 : 10; // Adjust font for narrow screens
+
     return TextButton(
       onPressed: onTap,
       style: TextButton.styleFrom(
         backgroundColor: color,
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        minimumSize: const Size(85, 30),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8), // Slightly reduced horizontal padding
+        minimumSize: const Size(0, 30), // Allow button to shrink in width
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
-      child: Text(text, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white)),
+      child: Text(
+        text,
+        textAlign: TextAlign.center, // Center text if it wraps
+        style: TextStyle(fontSize: buttonFontSize, fontWeight: FontWeight.bold, color: Colors.white),
+      ),
     );
   }
 
   // --- FINAL, DEFINITIVE VERSION OF THE BOTTOM BUTTONS ---
   // This layout makes both buttons have the exact same width and aligns them perfectly.
   Widget _buildBottomButtons(BuildContext context) {
-    // This is the style for the warning text, used for both the real one and the invisible spacer
-    const warningTextStyle = TextStyle(color: Colors.red, fontSize: 10, fontWeight: FontWeight.w500);
+    const subtitleStyle = TextStyle(color: Colors.red, fontSize: 9, fontWeight: FontWeight.w500);
+
+    // This is the little warning message that goes above the APPLY button
+    const Widget warningText = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.info_outline, color: Colors.red, size: 12),
+        SizedBox(width: 4),
+        Text('Upload Required Documents First', style: subtitleStyle),
+      ],
+    );
 
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), spreadRadius: -5, blurRadius: 10, offset: const Offset(0,-5) )],
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), spreadRadius: -2, blurRadius: 10, offset: const Offset(0,-5))],
       ),
       child: Row(
         children: [
@@ -342,19 +364,14 @@ class _ViewRequirementsScreenState extends State<ViewRequirementsScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Invisible warning text to balance the height
+                // Invisible placeholder to balance the height perfectly
                 const Opacity(
-                  opacity: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.info, color: Colors.red, size: 12),
-                      SizedBox(width: 4),
-                      Text('Placeholder', style: warningTextStyle),
-                    ],
+                  opacity: 0.0,
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    child: warningText,
                   ),
                 ),
-                const SizedBox(height: 4),
                 ElevatedButton(
                   onPressed: () => Navigator.of(context).pop(),
                   style: ElevatedButton.styleFrom(
@@ -375,19 +392,15 @@ class _ViewRequirementsScreenState extends State<ViewRequirementsScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // The actual, visible warning text
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.info, color: Colors.red, size: 12),
-                    SizedBox(width: 4),
-                    Text('Upload Required Documents First', style: warningTextStyle),
-                  ],
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 4.0),
+                  child: warningText,
                 ),
-                const SizedBox(height: 4),
+                // Removed the Stack with the red dot.
                 ElevatedButton(
                   onPressed: () => _showUploadRequiredDialog(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4CAF50), // A lighter green
+                    backgroundColor: AppColors.applyButtonGreen,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     padding: const EdgeInsets.symmetric(vertical: 16),
