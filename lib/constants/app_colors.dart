@@ -11,6 +11,11 @@ class AppColors {
   static const Color splashBackground = Color(0xFFE0F2F1);
   static const Color grantCardBorder = Color(0xFF3F861E);
   static const Color applyButtonGreen = Color(0xFF4C956C);
+  static const Color fileButtonColor = Color(0xFF68B2AB);
+  static const Color actionButtonColor = Color(0xFF68B2AB); // Added new color
+  static const Color formFieldFill = Color(0xFFF0F7F6);
+  static const Color formFieldBorder = Color(0xFFD6E9E6);
+  static const Color focusedBorderColor = Color(0xFF3F861E);
 
   // This material color swatch is also updated to match the new primaryGreen
   static const MaterialColor primaryMaterialColor = MaterialColor(

@@ -21,7 +21,7 @@ class _AvailableGrantsScreenState extends State<AvailableGrantsScreen> {
           children: [
             _buildAppBar(context),
             const SizedBox(height: 20),
-            _buildTabBar(context), // Pass context
+            _buildTabBar(),
             const SizedBox(height: 20),
             _buildFilterControls(),
             const SizedBox(height: 20),
@@ -67,7 +67,7 @@ class _AvailableGrantsScreenState extends State<AvailableGrantsScreen> {
     );
   }
 
-  Widget _buildTabBar(BuildContext context) { // Added context parameter
+  Widget _buildTabBar() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
@@ -77,20 +77,17 @@ class _AvailableGrantsScreenState extends State<AvailableGrantsScreen> {
             border: Border.all(color: Colors.grey.shade300)),
         child: Row(
           children: [
-            _buildTabButton(context, 'Eligible', 0), // Pass context
-            _buildTabButton(context, 'Non-Eligible', 1), // Pass context
-            _buildTabButton(context, 'Applied', 2), // Pass context
+            _buildTabButton('Eligible', 0),
+            _buildTabButton('Non-Eligible', 1),
+            _buildTabButton('Applied', 2),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTabButton(BuildContext context, String text, int index) { // Added context
+  Widget _buildTabButton(String text, int index) {
     bool isSelected = _selectedTabIndex == index;
-    final screenWidth = MediaQuery.of(context).size.width; // Get screen width
-    double fontSize = screenWidth < 360 ? 12.0 : 14.0; // Adjust font size based on screen width
-
     return Expanded(
       child: GestureDetector(
         onTap: () {
@@ -110,7 +107,6 @@ class _AvailableGrantsScreenState extends State<AvailableGrantsScreen> {
               style: TextStyle(
                 color: isSelected ? Colors.white : Colors.grey.shade600,
                 fontWeight: FontWeight.bold,
-                fontSize: fontSize, // Use responsive font size
               ),
             ),
           ),

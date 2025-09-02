@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/screens/home/home_screen.dart';
-import 'package:capstone/screens/auth/register_screen.dart';
+import 'package:capstone/screens/auth/signup_screen.dart'; // This import finds the correct signup screen
 import 'package:capstone/widgets/custom_button.dart';
-import 'package:capstone/widgets/custom_textfield.dart';
 import 'package:capstone/constants/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,141 +17,74 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    // Responsive values
-    double logoRadius = screenWidth * 0.15;
-    if (logoRadius > 60) logoRadius = 60;
-    if (logoRadius < 40) logoRadius = 40;
-
-    double titleFontSize = screenWidth * 0.08;
-    if (titleFontSize > 32) titleFontSize = 32;
-    if (titleFontSize < 24) titleFontSize = 24;
-
-    double subtitleFontSize = screenWidth * 0.045;
-    if (subtitleFontSize > 16) subtitleFontSize = 16;
-    if (subtitleFontSize < 13) subtitleFontSize = 13;
-
-    double smallTextFontSize = screenWidth * 0.038;
-    if (smallTextFontSize > 14) smallTextFontSize = 14;
-    if (smallTextFontSize < 11) smallTextFontSize = 11;
-
-    double mainHorizontalPadding = screenWidth * 0.06;
-
-    double topSpacing = screenHeight * 0.08; // Adjusted from 0.1
-    if (topSpacing > 80) topSpacing = 80;
-    if (topSpacing < 30) topSpacing = 30;
-
-    double generalSpacing = screenHeight * 0.025; // For spacing like 20
-    if (generalSpacing > 25) generalSpacing = 25;
-    if (generalSpacing < 15) generalSpacing = 15;
-    
-    double betweenFieldsSpacing = screenHeight * 0.022; // For spacing between text fields
-     if (betweenFieldsSpacing > 20) betweenFieldsSpacing = 20;
-    if (betweenFieldsSpacing < 12) betweenFieldsSpacing = 12;
-
-
-    double formSectionSpacing = screenHeight * 0.04; // For spacing like 40
-    if (formSectionSpacing > 40) formSectionSpacing = 40;
-    if (formSectionSpacing < 25) formSectionSpacing = 25;
-
-
     return Scaffold(
-      backgroundColor: AppColors.splashBackground,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: mainHorizontalPadding),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: topSpacing),
-
-                CircleAvatar(
-                  radius: logoRadius,
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: const AssetImage('assets/images/swisa_logo.png'),
+                const SizedBox(height: 80),
+                Image.asset(
+                  'assets/images/swisa-logo-circle.png',
+                  height: 120,
                 ),
-
-                SizedBox(height: generalSpacing),
-
-                Text(
+                const SizedBox(height: 20),
+                const Text(
                   'Login',
                   style: TextStyle(
-                    fontSize: titleFontSize,
+                    fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: AppColors.primaryGreen,
                   ),
                 ),
-
-                SizedBox(height: generalSpacing / 2), // Smaller spacing here
-
-                Text(
+                const SizedBox(height: 10),
+                const Text(
                   'Login to your account.',
                   style: TextStyle(
-                      color: AppColors.primaryGreen,
-                      fontSize: subtitleFontSize,
-                      fontWeight: FontWeight.w500
+                      color: Colors.black87,
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal
                   ),
                 ),
-
-                SizedBox(height: formSectionSpacing),
-
-                CustomTextField(
-                  hintText: 'Email Address or Phone Number',
+                const SizedBox(height: 40),
+                _buildTextFieldWithLabel(
+                  label: 'Enter email address or phone number',
+                  hint: 'Email address or Phone Number',
                   controller: _emailController,
                 ),
-
-                SizedBox(height: betweenFieldsSpacing),
-
-                CustomTextField(
-                  hintText: 'Password',
-                  isPassword: true,
+                const SizedBox(height: 20),
+                _buildTextFieldWithLabel(
+                  label: 'Enter password',
+                  hint: 'Password',
                   controller: _passwordController,
+                  isPassword: true,
                 ),
-
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () { /* TODO: Implement forgot password */ },
-                    child: Text(
-                        'Forgot password?',
-                        style: TextStyle(
-                            color: AppColors.primaryGreen,
-                            fontWeight: FontWeight.bold,
-                            fontSize: smallTextFontSize,
-                        )
-                    ),
-                  ),
-                ),
-
-                SizedBox(height: generalSpacing),
-
+                const SizedBox(height: 20),
                 CustomButton(
                   text: 'Login',
                   onPressed: () {
-                    // TODO: Implement login logic
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (_) => const HomeScreen()),
                     );
                   },
                 ),
-
-                SizedBox(height: formSectionSpacing),
-
+                const SizedBox(height: 24),
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                      // This now correctly navigates to your multi-step SignUpScreen
+                      MaterialPageRoute(builder: (_) => const SignUpScreen()),
                     );
                   },
-                  child: Text.rich(
+                  child: const Text.rich(
                     TextSpan(
-                      text: 'Not registered? ',
+                      text: 'Not a member? ',
                       style: TextStyle(
                           color: AppColors.textColor,
-                          fontSize: smallTextFontSize
+                          fontSize: 14
                       ),
                       children: [
                         TextSpan(
@@ -160,19 +92,65 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                             color: AppColors.primaryGreen,
                             fontWeight: FontWeight.bold,
-                            fontSize: smallTextFontSize,
+                            fontSize: 14,
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(height: generalSpacing), // Added some padding at the bottom
+                const SizedBox(height: 20),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTextFieldWithLabel({
+    required String label,
+    required String hint,
+    required TextEditingController controller,
+    bool isPassword = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
+            fontSize: 14,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: controller,
+          obscureText: isPassword,
+          decoration: InputDecoration(
+            hintText: hint,
+            suffixIcon: isPassword
+                ? const Icon(Icons.visibility_off_outlined, color: Colors.grey)
+                : null,
+            filled: true,
+            fillColor: AppColors.formFieldFill,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.0),
+              borderSide: const BorderSide(color: AppColors.formFieldBorder),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.0),
+              borderSide: const BorderSide(color: AppColors.formFieldBorder),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.0),
+              borderSide: const BorderSide(color: AppColors.primaryGreen, width: 2.0),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

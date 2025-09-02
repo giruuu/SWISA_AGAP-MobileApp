@@ -11,6 +11,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Responsive AppBar Title Font Size
+    double appBarTitleFontSize = 20.0; // Default
+    if (screenWidth < 360) { // For very small screens
+      appBarTitleFontSize = 18.0;
+    } else if (screenWidth > 720) { // For larger screens/tablets in portrait
+      appBarTitleFontSize = 22.0;
+    }
+    // You can add more breakpoints if needed
+
     return MaterialApp(
       title: 'Swisa AGAP',
       debugShowCheckedModeBanner: false,
@@ -25,13 +36,13 @@ class MyApp extends StatelessWidget {
           bodyLarge: TextStyle(color: AppColors.textColor),
           bodyMedium: TextStyle(color: AppColors.textColor),
         ),
-        appBarTheme: const AppBarTheme(
+        appBarTheme: AppBarTheme( // Made this non-const to allow dynamic fontSize
           elevation: 0,
           backgroundColor: Colors.transparent,
-          iconTheme: IconThemeData(color: AppColors.primaryGreen),
+          iconTheme: const IconThemeData(color: AppColors.primaryGreen), // Kept const where possible
           titleTextStyle: TextStyle(
               color: AppColors.primaryGreen,
-              fontSize: 20,
+              fontSize: appBarTitleFontSize, // Use responsive font size
               fontWeight: FontWeight.bold),
         ),
       ),

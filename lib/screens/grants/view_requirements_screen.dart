@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/constants/app_colors.dart';
 import 'package:capstone/screens/grants/view_file_screen.dart';
+import 'package:capstone/screens/grants/application_form_screen.dart';
 import 'package:image_picker/image_picker.dart';
 
 // Enum to represent the status of a requirement
 enum RequirementStatus { approved, missing }
+
+// Helper class to hold requirement data
+class _Requirement {
+  String name;
+  RequirementStatus status;
+  _Requirement({required this.name, required this.status});
+}
 
 class ViewRequirementsScreen extends StatefulWidget {
   const ViewRequirementsScreen({super.key});
@@ -14,30 +22,50 @@ class ViewRequirementsScreen extends StatefulWidget {
 }
 
 class _ViewRequirementsScreenState extends State<ViewRequirementsScreen> {
-
   final ImagePicker _picker = ImagePicker();
 
-  Future<void> _pickImage(ImageSource source) async {
-    Navigator.of(context).pop();
+  final List<_Requirement> _requirements = [
+    _Requirement(name: 'VALID ID / GOVERMENT ID', status: RequirementStatus.missing),
+    _Requirement(name: 'REQUIREMENT NO. 2', status: RequirementStatus.missing),
+    _Requirement(name: 'REQUIREMENT NO. 3', status: RequirementStatus.missing),
+    _Requirement(name: 'REQUIREMENT NO. 4', status: RequirementStatus.missing),
+  ];
+
+  bool get _allRequirementsApproved =>
+      _requirements.every((req) => req.status == RequirementStatus.approved);
+
+  void _updateRequirementStatus(int index, RequirementStatus newStatus) {
+    if (index >= 0 && index < _requirements.length) {
+      setState(() {
+        _requirements[index].status = newStatus;
+      });
+    }
+  }
+
+  Future<void> _pickImage(ImageSource source, int requirementIndex) async {
     try {
       final XFile? pickedFile = await _picker.pickImage(source: source);
       if (pickedFile != null) {
-        print('Image picked: ${pickedFile.path}');
+        print('Image picked for requirement index $requirementIndex: ${pickedFile.path}');
+        _updateRequirementStatus(requirementIndex, RequirementStatus.approved);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Image Selected: ${pickedFile.name}')),
+          SnackBar(content: Text("'${_requirements[requirementIndex].name}' uploaded successfully!")),
         );
       } else {
         print('No image selected.');
       }
     } catch (e) {
       print('Error picking image: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error picking image: $e')),
+      );
     }
   }
 
   void _showUploadRequiredDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           child: Padding(
@@ -51,9 +79,12 @@ class _ViewRequirementsScreenState extends State<ViewRequirementsScreen> {
                   child: Icon(Icons.priority_high_rounded, color: Colors.white, size: 40),
                 ),
                 const SizedBox(height: 20),
-                const Text('Upload Required Documents First', textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const Text('Upload Required Documents First',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 12),
-                Text('Please upload all required documents before you can apply.', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey[600])),
+                Text('Please upload all required documents before you can apply.',
+                    textAlign: TextAlign.center, style: TextStyle(color: Colors.grey[600])),
                 const SizedBox(height: 24),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -62,7 +93,7 @@ class _ViewRequirementsScreenState extends State<ViewRequirementsScreen> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                   ),
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => Navigator.of(dialogContext).pop(),
                   child: const Text('Complete Requirements'),
                 )
               ],
@@ -73,10 +104,10 @@ class _ViewRequirementsScreenState extends State<ViewRequirementsScreen> {
     );
   }
 
-  void _showUploadFileDialog(BuildContext context) {
+  void _showUploadFileDialog(BuildContext context, int requirementIndex) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           child: Padding(
@@ -84,15 +115,24 @@ class _ViewRequirementsScreenState extends State<ViewRequirementsScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text('UPLOAD FILE', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const Text('UPLOAD FILE',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 24),
                 IntrinsicHeight(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _buildUploadOption(context, icon: Icons.camera_alt_outlined, label: 'OPEN CAMERA', source: ImageSource.camera),
+                      _buildUploadOption(dialogContext,
+                          icon: Icons.camera_alt_outlined,
+                          label: 'OPEN CAMERA',
+                          source: ImageSource.camera,
+                          requirementIndex: requirementIndex),
                       const VerticalDivider(thickness: 1),
-                      _buildUploadOption(context, icon: Icons.folder_open_outlined, label: 'OPEN LOCAL FILES', source: ImageSource.gallery),
+                      _buildUploadOption(dialogContext,
+                          icon: Icons.folder_open_outlined,
+                          label: 'OPEN LOCAL FILES',
+                          source: ImageSource.gallery,
+                          requirementIndex: requirementIndex),
                     ],
                   ),
                 ),
@@ -104,10 +144,17 @@ class _ViewRequirementsScreenState extends State<ViewRequirementsScreen> {
     );
   }
 
-  Widget _buildUploadOption(BuildContext context, {required IconData icon, required String label, required ImageSource source}) {
+  Widget _buildUploadOption(BuildContext dialogContext,
+      {required IconData icon,
+        required String label,
+        required ImageSource source,
+        required int requirementIndex}) {
     return Expanded(
       child: InkWell(
-        onTap: () => _pickImage(source),
+        onTap: () {
+          Navigator.of(dialogContext).pop();
+          _pickImage(source, requirementIndex);
+        },
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -196,7 +243,9 @@ class _ViewRequirementsScreenState extends State<ViewRequirementsScreen> {
                   child: Icon(Icons.check_box_outlined, color: AppColors.primaryGreen, size: 30),
                 ),
                 SizedBox(height: 8),
-                Text('CASH GRANT', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+                Text('CASH GRANT',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
               ],
             ),
           ),
@@ -268,108 +317,122 @@ class _ViewRequirementsScreenState extends State<ViewRequirementsScreen> {
       children: [
         const Text('Requirements', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         const SizedBox(height: 16),
-        _buildRequirementRow(context, name: 'VALID ID / GOVERMENT ID', status: RequirementStatus.approved),
-        _buildRequirementRow(context, name: 'REQUIREMENT NO. 2', status: RequirementStatus.approved),
-        _buildRequirementRow(context, name: 'REQUIREMENT NO. 3', status: RequirementStatus.missing),
-        _buildRequirementRow(context, name: 'REQUIREMENT NO. 4', status: RequirementStatus.missing),
+        Column(
+          children: _requirements.asMap().entries.map((entry) {
+            int idx = entry.key;
+            _Requirement req = entry.value;
+            return _buildRequirementRow(context, name: req.name, status: req.status, requirementIndex: idx);
+          }).toList(),
+        ),
       ],
     );
   }
 
-  Widget _buildRequirementRow(BuildContext context, {required String name, required RequirementStatus status}) {
+  // --- REQUIREMENT ROW WIDGET CORRECTED ---
+  Widget _buildRequirementRow(BuildContext context, {required String name, required RequirementStatus status, required int requirementIndex}) {
     bool isApproved = status == RequirementStatus.approved;
-    // final screenWidth = MediaQuery.of(context).size.width; // Can be used for more adjustments
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Row(
         children: [
-          Expanded(
-            flex: 3, // Give more space to the name
-            child: Text(name, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
-          ),
+          Expanded(child: Text(name, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14))),
           const SizedBox(width: 8),
-          Icon(isApproved ? Icons.check_circle : Icons.cancel, color: isApproved ? Colors.green : Colors.red, size: 22), // Slightly smaller
+          Icon(isApproved ? Icons.check_circle : Icons.cancel, color: isApproved ? Colors.green : Colors.red, size: 22),
           const SizedBox(width: 8),
-          const Icon(Icons.file_present_rounded, color: Colors.deepPurple, size: 22), // Slightly smaller
+          const Icon(Icons.file_present_rounded, color: Colors.deepPurple, size: 22),
           const SizedBox(width: 8),
-          Expanded(
-            flex: 2,
-            child: isApproved
-                ? _buildFileActionButton(context, 'VIEW FILE', Colors.blue.shade700, onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => ViewFileScreen(requirementTitle: name)),
-              );
-            })
-                : _buildFileActionButton(context, 'UPLOAD FILE', Colors.orange.shade700, onTap: () => _showUploadFileDialog(context)),
-          ),
-          const SizedBox(width: 4), // Reduced space between buttons
-          Expanded(
-            flex: 2,
-            child: _buildFileActionButton(context, 'DOWNLOAD', Colors.grey.shade600, onTap: () { /* TODO: Implement download */})
-          ),
+          isApproved
+          // --- VIEW FILE and UPLOAD FILE buttons are now the same size and color ---
+              ? _buildFileActionButton('VIEW FILE', AppColors.fileButtonColor, onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => ViewFileScreen(requirementTitle: name)),
+            );
+          })
+              : _buildFileActionButton('UPLOAD FILE', AppColors.fileButtonColor, onTap: () => _showUploadFileDialog(context, requirementIndex)),
+          const SizedBox(width: 4),
+          _buildFileActionButton('DOWNLOAD', Colors.grey.shade600, onTap: () {}),
         ],
       ),
     );
   }
 
-  Widget _buildFileActionButton(BuildContext context, String text, Color color, {VoidCallback? onTap}) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    double buttonFontSize = screenWidth < 360 ? 9 : 10; // Adjust font for narrow screens
-
-    return TextButton(
-      onPressed: onTap,
-      style: TextButton.styleFrom(
-        backgroundColor: color,
-        foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8), // Slightly reduced horizontal padding
-        minimumSize: const Size(0, 30), // Allow button to shrink in width
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      ),
-      child: Text(
-        text,
-        textAlign: TextAlign.center, // Center text if it wraps
-        style: TextStyle(fontSize: buttonFontSize, fontWeight: FontWeight.bold, color: Colors.white),
+  // --- SIZING AND STYLING UPDATED TO BE CONSISTENT ---
+  Widget _buildFileActionButton(String label, Color color, {VoidCallback? onTap}) {
+    // This SizedBox wrapper ensures all buttons are the same width, wide enough for "UPLOAD FILE"
+    return SizedBox(
+      width: 95,
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          textStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          minimumSize: const Size(0, 30),
+        ),
+        child: Text(label),
       ),
     );
   }
 
-  // --- FINAL, DEFINITIVE VERSION OF THE BOTTOM BUTTONS ---
-  // This layout makes both buttons have the exact same width and aligns them perfectly.
   Widget _buildBottomButtons(BuildContext context) {
     const subtitleStyle = TextStyle(color: Colors.red, fontSize: 9, fontWeight: FontWeight.w500);
-
-    // This is the little warning message that goes above the APPLY button
-    const Widget warningText = Row(
+    const Widget warningTextWidget = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(Icons.info_outline, color: Colors.red, size: 12),
         SizedBox(width: 4),
-        Text('Upload Required Documents First', style: subtitleStyle),
+        Expanded(child: Text('Upload Required Documents First', style: subtitleStyle, overflow: TextOverflow.ellipsis, maxLines: 1)),
       ],
+    );
+
+    // --- RED DOT REMOVED FROM THIS WIDGET ---
+    Widget applyButton = ElevatedButton(
+      onPressed: () {
+        if (_allRequirementsApproved) {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const ApplicationFormScreen()),
+          );
+        } else {
+          _showUploadRequiredDialog(context);
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.applyButtonGreen,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        padding: const EdgeInsets.symmetric(vertical: 16),
+      ),
+      child: const Text('APPLY'),
     );
 
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), spreadRadius: -2, blurRadius: 10, offset: const Offset(0,-5))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            spreadRadius: -2,
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          )
+        ],
       ),
       child: Row(
         children: [
-          // Both button sections are wrapped in Expanded to ensure equal width.
           Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Invisible placeholder to balance the height perfectly
-                const Opacity(
-                  opacity: 0.0,
-                  child: Padding(
+                Visibility(
+                  visible: false,
+                  maintainSize: true, maintainState: true, maintainAnimation: true,
+                  child: const Padding(
                     padding: EdgeInsets.only(bottom: 4.0),
-                    child: warningText,
+                    child: warningTextWidget,
                   ),
                 ),
                 ElevatedButton(
@@ -391,22 +454,15 @@ class _ViewRequirementsScreenState extends State<ViewRequirementsScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // The actual, visible warning text
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 4.0),
-                  child: warningText,
-                ),
-                // Removed the Stack with the red dot.
-                ElevatedButton(
-                  onPressed: () => _showUploadRequiredDialog(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.applyButtonGreen,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 300),
+                  opacity: _allRequirementsApproved ? 0.0 : 1.0,
+                  child: const Padding(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    child: warningTextWidget,
                   ),
-                  child: const Text('APPLY'),
                 ),
+                applyButton,
               ],
             ),
           ),
