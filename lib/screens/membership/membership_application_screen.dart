@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/constants/app_colors.dart';
-import 'package:capstone/widgets/custom_button.dart';
-import 'package:capstone/widgets/custom_header.dart';
-import 'package:capstone/widgets/custom_textfield.dart';
+import 'package:capstone/screens/membership/application_submitted_screen.dart';
 
 class MembershipApplicationScreen extends StatefulWidget {
   const MembershipApplicationScreen({super.key});
@@ -12,217 +10,296 @@ class MembershipApplicationScreen extends StatefulWidget {
 }
 
 class _MembershipApplicationScreenState extends State<MembershipApplicationScreen> {
-  final _fullNameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _authCodeController = TextEditingController();
-  String? _selectedCrop;
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _nextPage() {
+    if (_currentPage < 3) { // 4 pages total (0, 1, 2, 3)
+      _pageController.animateToPage(
+        _currentPage + 1,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  int _getCurrentMainStep() {
+    if (_currentPage <= 1) { // Pages 0 and 1 are part of Main Step 1
+      return 1;
+    } else if (_currentPage == 2) { // Page 2 is Main Step 2
+      return 2;
+    } else { // Page 3 is Main Step 3
+      return 3;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    // Responsive padding
-    double horizontalPadding = screenWidth * 0.05; // 5% of screen width
-    double verticalPadding = screenHeight * 0.02;  // 2% of screen height
-
-    // Responsive font sizes
-    double titleFontSize = screenWidth * 0.06; // e.g., 6% of screen width
-    if (titleFontSize > 28) titleFontSize = 28; // Max size
-    if (titleFontSize < 20) titleFontSize = 20; // Min size
-
-    double sectionLabelFontSize = screenWidth * 0.035;
-    if (sectionLabelFontSize > 14) sectionLabelFontSize = 14;
-    if (sectionLabelFontSize < 10) sectionLabelFontSize = 10;
-
-
-    // Responsive spacing
-    double spacingExtraLarge = screenHeight * 0.035; // ~30
-    double spacingLarge = screenHeight * 0.028;    // ~24
-    double spacingMedium = screenHeight * 0.023;   // ~20
-    double spacingSmall = screenHeight * 0.018;    // ~16
-
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const CustomHeader(isProfileButtonActive: false),
-                SizedBox(height: spacingLarge),
-                Text(
-                  'Membership Application',
-                  style: TextStyle(fontSize: titleFontSize, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: spacingLarge),
-                _buildTextFieldWithLabel(context, 'FULL NAME', _fullNameController),
-                SizedBox(height: spacingMedium),
-                _buildTextFieldWithLabel(context, 'EMAIL', _emailController),
-                SizedBox(height: spacingMedium),
-                _buildTextFieldWithLabel(context, 'PHONE NUMBER', _phoneController),
-                SizedBox(height: spacingMedium),
-                _buildTextFieldWithLabel(context, 'AUTHENTICATION CODE', _authCodeController),
-                SizedBox(height: spacingMedium),
-                _buildDropdownField(context),
-                SizedBox(height: spacingExtraLarge),
-                Text('ATTACH REQUIRED DOCUMENT', style: TextStyle(fontWeight: FontWeight.bold, fontSize: sectionLabelFontSize)),
-                SizedBox(height: spacingSmall),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildAttachmentBox(context),
-                    _buildAttachmentBox(context),
-                    _buildAttachmentBox(context),
-                  ],
-                ),
-                SizedBox(height: spacingExtraLarge),
-                CustomButton(
-                  text: 'SUBMIT APPLICATION',
-                  onPressed: () { /* TODO: Implement submit logic */ },
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextFieldWithLabel(BuildContext context, String label, TextEditingController controller) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    double labelFontSize = screenWidth * 0.03; // 3% of screen width
-     if (labelFontSize > 13) labelFontSize = 13;
-     if (labelFontSize < 10) labelFontSize = 10;
-
-    double internalSpacing = screenHeight * 0.009; // ~8
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: TextStyle(fontWeight: FontWeight.bold, fontSize: labelFontSize)),
-        SizedBox(height: internalSpacing),
-        CustomTextField( // Assuming CustomTextField is already responsive
-          hintText: '',
-          controller: controller,
-          hasBorder: true,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDropdownField(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    double labelFontSize = screenWidth * 0.03;
-    if (labelFontSize > 13) labelFontSize = 13;
-    if (labelFontSize < 10) labelFontSize = 10;
-
-    double internalSpacing = screenHeight * 0.009; // ~8
-    double dropdownItemFontSize = screenWidth * 0.035;
-    if (dropdownItemFontSize > 15) dropdownItemFontSize = 15;
-    if (dropdownItemFontSize < 12) dropdownItemFontSize = 12;
-
-    double verticalPadding = screenHeight * 0.021; // ~18
-    double horizontalPadding = screenWidth * 0.045; // ~20
-    double borderRadiusVal = screenWidth * 0.03; // ~12
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('PRIMARY CROPS', style: TextStyle(fontWeight: FontWeight.bold, fontSize: labelFontSize)),
-        SizedBox(height: internalSpacing),
-        DropdownButtonFormField<String>(
-          value: _selectedCrop,
-          hint: Text('Select a crop', style: TextStyle(fontSize: dropdownItemFontSize)),
-          style: TextStyle(fontSize: dropdownItemFontSize, color: Colors.black), // For selected item
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: horizontalPadding),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(borderRadiusVal),
-              borderSide: const BorderSide(color: AppColors.primaryGreen, width: 1.5),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(borderRadiusVal),
-              borderSide: const BorderSide(color: AppColors.primaryGreen, width: 2.5),
-            ),
-          ),
-          onChanged: (String? newValue) {
-            setState(() {
-              _selectedCrop = newValue;
-            });
-          },
-          items: <String>['Corn', 'Rice', 'Sugarcane', 'Vegetables']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value, style: TextStyle(fontSize: dropdownItemFontSize)),
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAttachmentBox(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    // The box is in a Row with 3 items, so width is roughly screenWidth / 3
-    // Let's make height proportional to this effective width.
-    double boxEffectiveWidth = screenWidth / 3.3; // Account for spacing
-    double boxHeight = boxEffectiveWidth * 0.9; // Adjust factor for desired aspect ratio
-    if (boxHeight > 130) boxHeight = 130; // Max height
-    if (boxHeight < 90) boxHeight = 90;   // Min height
-
-    double horizontalMargin = screenWidth * 0.008; // ~4
-    double borderRadiusVal = screenWidth * 0.03;   // ~12
-
-    double iconSize = boxHeight * 0.35; // Icon size proportional to box height
-    if (iconSize > 45) iconSize = 45;
-    if (iconSize < 30) iconSize = 30;
-
-    double internalSpacing = boxHeight * 0.07; // ~8
-    double textFontSize = boxHeight * 0.09;
-    if (textFontSize > 11) textFontSize = 11;
-    if (textFontSize < 8) textFontSize = 8;
-
-
-    return Expanded(
-      child: Container(
-        height: boxHeight,
-        margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(borderRadiusVal),
-          border: Border.all(color: Colors.grey.shade400, width: 1.5),
-        ),
-        child: InkWell(
-          onTap: () { /* TODO: Implement file picking */ },
-          borderRadius: BorderRadius.circular(borderRadiusVal),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.photo_library_outlined, color: Colors.grey.shade600, size: iconSize),
-              SizedBox(height: internalSpacing),
-              Text(
-                'ATTACH FILE OR PHOTO HERE',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: textFontSize, color: Colors.grey.shade600, fontWeight: FontWeight.w500),
+        child: Column(
+          children: [
+            _buildAppBar(context, currentMainStep: _getCurrentMainStep(), totalMainSteps: 3),
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                onPageChanged: (int page) {
+                  setState(() {
+                    _currentPage = page;
+                  });
+                },
+                children: [
+                  _Page1PersonalInfo(onNext: _nextPage),
+                  _Page2SecondaryContact(onNext: _nextPage),
+                  _Page3AgricultureInfo(onNext: _nextPage),
+                  _Page4RequirementsChecking(),
+                ],
               ),
-            ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// --- SHARED WIDGETS AND PAGE BUILDERS ---
+
+Widget _buildAppBar(BuildContext context, {required int currentMainStep, required int totalMainSteps}) {
+  return Column(
+    children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back, color: AppColors.primaryGreen, size: 28),
+            onPressed: () => Navigator.of(context).pop(),
           ),
         ),
       ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: Row(
+          children: List.generate(totalMainSteps, (index) => Expanded(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              height: 4,
+              decoration: BoxDecoration(
+                color: (index < currentMainStep) ? AppColors.primaryGreen : Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          )),
+        ),
+      ),
+    ],
+  );
+}
+
+Widget _buildSectionTitle(String title, {bool isSubSection = false}) {
+  return Text(
+    title,
+    style: TextStyle(
+      fontSize: isSubSection ? 16 : 18,
+      fontWeight: FontWeight.bold,
+      color: isSubSection ? Colors.grey[800] : Colors.black,
+    ),
+  );
+}
+
+Widget _buildTextField({required String labelText, bool isDropdown = false}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: TextFormField(
+      decoration: InputDecoration(
+        labelText: labelText,
+        suffixIcon: isDropdown ? const Icon(Icons.arrow_drop_down, color: Colors.grey) : null,
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.textFieldBorder)),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.textFieldBorder)),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.primaryGreen, width: 2.0)),
+      ),
+    ),
+  );
+}
+
+// --- PAGE 1: PERSONAL INFORMATION ---
+class _Page1PersonalInfo extends StatelessWidget {
+  final VoidCallback onNext;
+  const _Page1PersonalInfo({required this.onNext});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 24),
+          _buildSectionTitle('Membership Application'),
+          const SizedBox(height: 20),
+          _buildSectionTitle('Personal Information', isSubSection: true),
+          const SizedBox(height: 16),
+          Row(children: [Expanded(child: _buildTextField(labelText: 'First Name')), const SizedBox(width: 16), SizedBox(width: 100, child: _buildTextField(labelText: 'Suffix', isDropdown: true))]),
+          _buildTextField(labelText: 'Middle Name'),
+          Row(children: [const Checkbox(value: false, onChanged: null), const Text('I have no middle name', style: TextStyle(color: Colors.grey, fontSize: 13))]),
+          _buildTextField(labelText: 'Last Name'),
+          Row(children: [Expanded(child: _buildTextField(labelText: 'Civil Status', isDropdown: true)), const SizedBox(width: 16), Expanded(child: _buildTextField(labelText: 'Sex', isDropdown: true))]),
+          _buildTextField(labelText: 'Date of Birth'),
+          _buildTextField(labelText: 'Place of Birth'),
+          const SizedBox(height: 20),
+          _buildSectionTitle('Address', isSubSection: true),
+          const SizedBox(height: 16),
+          _buildTextField(labelText: 'Province'),
+          _buildTextField(labelText: 'City/Municipality'),
+          Row(children: [Expanded(child: _buildTextField(labelText: 'House No.')), const SizedBox(width: 16), Expanded(flex: 2, child: _buildTextField(labelText: 'Street/Barangay'))]),
+          const SizedBox(height: 20),
+          _buildSectionTitle('Contact Information', isSubSection: true),
+          const SizedBox(height: 16),
+          _buildTextField(labelText: 'Phone Number'),
+          _buildTextField(labelText: 'Email Address'),
+          const SizedBox(height: 40),
+          SizedBox(width: double.infinity, child: ElevatedButton(onPressed: onNext, style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryGreen, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), padding: const EdgeInsets.symmetric(vertical: 16), textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)), child: const Text('Next'))),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+}
+
+// --- PAGE 2: SECONDARY CONTACT ---
+class _Page2SecondaryContact extends StatelessWidget {
+  final VoidCallback onNext;
+  const _Page2SecondaryContact({required this.onNext});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 24),
+          _buildSectionTitle('Membership Application'),
+          const SizedBox(height: 20),
+          _buildSectionTitle('Secondary Contact', isSubSection: true),
+          const SizedBox(height: 16),
+          Row(children: [Expanded(child: _buildTextField(labelText: 'First Name')), const SizedBox(width: 16), SizedBox(width: 100, child: _buildTextField(labelText: 'Suffix', isDropdown: true))]),
+          _buildTextField(labelText: 'Middle Name'),
+          Row(children: [const Checkbox(value: false, onChanged: null), const Text('I have no middle name', style: TextStyle(color: Colors.grey, fontSize: 13))]),
+          _buildTextField(labelText: 'Last Name'),
+          Row(children: [Expanded(child: _buildTextField(labelText: 'Relationship', isDropdown: true)), const SizedBox(width: 16), Expanded(child: _buildTextField(labelText: 'Sex', isDropdown: true))]),
+          _buildTextField(labelText: 'Date of Birth'),
+          const SizedBox(height: 20),
+          _buildSectionTitle('Contact Information', isSubSection: true),
+          const SizedBox(height: 16),
+          _buildTextField(labelText: 'Phone Number'),
+          _buildTextField(labelText: 'Email Address'),
+          const SizedBox(height: 40),
+          SizedBox(width: double.infinity, child: ElevatedButton(onPressed: onNext, style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryGreen, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), padding: const EdgeInsets.symmetric(vertical: 16), textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)), child: const Text('Next'))),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+}
+
+// --- PAGE 3: AGRICULTURE INFO ---
+class _Page3AgricultureInfo extends StatelessWidget {
+  final VoidCallback onNext;
+  const _Page3AgricultureInfo({required this.onNext});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 24),
+          _buildSectionTitle('Agriculture/Livelihood Information'),
+          const SizedBox(height: 20),
+          _buildSectionTitle('Additional Information', isSubSection: true),
+          const SizedBox(height: 16),
+          _buildTextField(labelText: 'Type of Farmer/Fisher', isDropdown: true),
+          _buildTextField(labelText: 'Farm/Lot Location'),
+          _buildTextField(labelText: 'Estimated Land Size'),
+          _buildTextField(labelText: 'Water Source'),
+          _buildTextField(labelText: 'Purpose of Membership'),
+          const SizedBox(height: 40),
+          SizedBox(width: double.infinity, child: ElevatedButton(onPressed: onNext, style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryGreen, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), padding: const EdgeInsets.symmetric(vertical: 16), textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)), child: const Text('Next'))),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+}
+
+// --- PAGE 4: REQUIREMENTS CHECKING ---
+class _Page4RequirementsChecking extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 24),
+          _buildSectionTitle('Requirements Checking'),
+          const SizedBox(height: 20),
+          _buildSectionTitle('Requirements', isSubSection: true),
+          const SizedBox(height: 16),
+          _buildRequirementRow(context, 'VALID ID / GOVERMENT ID', isApproved: true),
+          _buildRequirementRow(context, 'REQUIREMENT NO. 1', isApproved: true),
+          _buildRequirementRow(context, 'REQUIREMENT NO. 1', isApproved: true),
+          _buildRequirementRow(context, 'REQUIREMENT NO. 1', isApproved: false),
+          _buildRequirementRow(context, 'REQUIREMENT NO. 1', isApproved: false),
+          const SizedBox(height: 40),
+          SizedBox(width: double.infinity, child: ElevatedButton(onPressed: () {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const ApplicationSubmittedScreen()),
+                  (route) => false,
+            );
+          }, style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryGreen, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)), padding: const EdgeInsets.symmetric(vertical: 16), textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)), child: const Text('Next'))),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRequirementRow(BuildContext context, String name, {required bool isApproved}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      child: Row(
+        children: [
+          Expanded(child: Text(name, style: const TextStyle(fontWeight: FontWeight.w500))),
+          Icon(isApproved ? Icons.check_circle : Icons.cancel, color: isApproved ? Colors.green : Colors.red, size: 24),
+          const SizedBox(width: 16),
+          const Icon(Icons.file_present_rounded, color: Colors.deepPurple, size: 24),
+          const SizedBox(width: 16),
+          _buildFileActionButton('VIEW FILE', isApproved ? Colors.teal : Colors.grey),
+          const SizedBox(width: 8),
+          _buildFileActionButton('DOWNLOAD', Colors.grey),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFileActionButton(String text, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(6)),
+      child: Text(text, style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
     );
   }
 }

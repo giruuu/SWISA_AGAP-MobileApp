@@ -183,7 +183,7 @@ class _Page2PhoneOtpForm extends StatelessWidget {
 Widget _buildInfoBox() {
   return Container(
     padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(color: AppColors.primaryGreen.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
-    child: Row(children: [Icon(Icons.info_outline, color: AppColors.primaryGreen.withOpacity(0.8)), const SizedBox(width: 12), const Expanded(child: Text.rich(TextSpan(style: TextStyle(color: Colors.black54), children: [TextSpan(text: 'Kindly wait for at least '), TextSpan(text: '3 minutes', style: TextStyle(fontWeight: FontWeight.bold)), TextSpan(text: ' for your 6-digit OTP to arrive. Sometimes there may be delays when receiving it. Thank you for your patience!')])))]),
+    decoration: BoxDecoration(color: AppColors.primaryGreen.withAlpha((255 * 0.1).round()), borderRadius: BorderRadius.circular(12)),
+    child: Row(children: [Icon(Icons.info_outline, color: AppColors.primaryGreen.withAlpha((255 * 0.8).round())), const SizedBox(width: 12), const Expanded(child: Text.rich(TextSpan(style: TextStyle(color: Colors.black54), children: [TextSpan(text: 'Kindly wait for at least '), TextSpan(text: '3 minutes', style: TextStyle(fontWeight: FontWeight.bold)), TextSpan(text: ' for your 6-digit OTP to arrive. Sometimes there may be delays when receiving it. Thank you for your patience!')])))]),
   );
 }

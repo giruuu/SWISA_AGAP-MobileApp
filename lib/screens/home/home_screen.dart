@@ -5,6 +5,7 @@ import 'package:capstone/widgets/custom_header.dart';
 import 'package:capstone/screens/grants/available_grants_screen.dart';
 import 'package:capstone/screens/grant_status/grant_status.dart';
 import 'package:capstone/screens/training_and_workshop/training_and_workshop.dart';
+import 'package:capstone/screens/contributions/contributions_screen.dart'; // Added import
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -78,7 +79,11 @@ class HomeScreen extends StatelessWidget {
             MaterialPageRoute(builder: (context) => const GrantStatus()),
           );}),
           const SizedBox(width: 14),
-          _buildFeatureButton(iconColor: AppColors.primaryGreen, icon: Icons.volunteer_activism_outlined, label: 'CONTRIBUTIONS\n', onTap: () {}),
+          _buildFeatureButton(iconColor: AppColors.primaryGreen, icon: Icons.volunteer_activism_outlined, label: 'CONTRIBUTIONS\n', onTap: () {
+            Navigator.of(context).push( // Navigate to ContributionsScreen
+              MaterialPageRoute(builder: (context) => const ContributionsScreen()),
+            );
+          }),
         ],
       ),
     );

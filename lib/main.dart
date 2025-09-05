@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Set the fit size based on your UI design (375x812)
+    // Set the fit size based on your UI design (e.g., iPhone X)
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,
@@ -23,7 +23,9 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: AppColors.primaryMaterialColor,
-            scaffoldBackgroundColor: AppColors.backgroundColor,
+            // --- THIS LINE IS CORRECTED ---
+            // Changed AppColors.backgroundColor to Colors.white to avoid an error
+            scaffoldBackgroundColor: Colors.white,
 
             // This applies the font to the whole app
             fontFamily: 'Poppins',

@@ -1,162 +1,223 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/constants/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CreditScoreHistoryScreen extends StatelessWidget {
+// Converted to a StatefulWidget to manage the expand/collapse state
+class CreditScoreHistoryScreen extends StatefulWidget {
   const CreditScoreHistoryScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+  State<CreditScoreHistoryScreen> createState() => _CreditScoreHistoryScreenState();
+}
 
-    // Responsive AppBar elements
-    double appBarUsernameFontSize = screenWidth * 0.035;
-    if (appBarUsernameFontSize > 14) appBarUsernameFontSize = 14;
-    if (appBarUsernameFontSize < 10) appBarUsernameFontSize = 10;
+class _CreditScoreHistoryScreenState extends State<CreditScoreHistoryScreen> {
+  bool _isHistoryExpanded = true;
 
-    double appBarAvatarRadius = screenWidth * 0.045;
-    if (appBarAvatarRadius > 20) appBarAvatarRadius = 20;
-    if (appBarAvatarRadius < 16) appBarAvatarRadius = 16;
-
-    double appBarIconSize = appBarAvatarRadius * 0.9;
-    double appBarSpacing = screenWidth * 0.02;
-
-    // Responsive body padding
-    double horizontalPadding = screenWidth * 0.04; // 4% of screen width
-
-    // Responsive title font size
-    double titleFontSize = screenWidth * 0.06;
-    if (titleFontSize > 26) titleFontSize = 26; // Max size
-    if (titleFontSize < 20) titleFontSize = 20; // Min size
-
-    // Responsive vertical spacing
-    double spacingSmall = screenHeight * 0.02; // ~16
-    double spacingMedium = screenHeight * 0.03; // ~24
-
-    // Responsive Credit Score Card elements
-    double cardBorderRadius = screenWidth * 0.03; // ~12
-    double cardPadding = screenWidth * 0.04; // ~16
-    double scoreLabelFontSize = screenWidth * 0.04; // ~16
-    if (scoreLabelFontSize > 18) scoreLabelFontSize = 18;
-    if (scoreLabelFontSize < 14) scoreLabelFontSize = 14;
-
-    double scoreValueFontSize = screenWidth * 0.05; // ~20
-    if (scoreValueFontSize > 22) scoreValueFontSize = 22;
-    if (scoreValueFontSize < 18) scoreValueFontSize = 18;
-
-    double scoreUnitFontSize = screenWidth * 0.035; // ~14
-    if (scoreUnitFontSize > 16) scoreUnitFontSize = 16;
-    if (scoreUnitFontSize < 12) scoreUnitFontSize = 12;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('SwisaAGAP'), // Consider making this responsive if needed
-        actions: [
-          Row(
-            children: [
-              Text('Username', style: TextStyle(color: AppColors.textColor, fontSize: appBarUsernameFontSize)),
-              SizedBox(width: appBarSpacing),
-              IconButton(
-                icon: CircleAvatar(
-                  radius: appBarAvatarRadius,
-                  backgroundColor: AppColors.primaryGreen,
-                  child: Icon(Icons.person, color: Colors.white, size: appBarIconSize),
-                ),
-                onPressed: () {
-                  // TODO: Navigate to profile or handle action
-                },
-              ),
-              SizedBox(width: screenWidth * 0.02), // Right padding for the action items
-            ],
-          )
-        ],
+  // Consistent shadow style from Contributions screen
+  List<BoxShadow> get cardShadow {
+    return [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.08),
+        blurRadius: 20,
+        offset: const Offset(0, 5),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+    ];
+  }
+
+  // Consistent border style from Contributions screen
+  Border get cardBorder {
+    return Border.all(color: AppColors.primaryGreen.withOpacity(0.7), width: 1.0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: spacingSmall),
-            Text('Credit Score History', style: TextStyle(fontSize: titleFontSize, fontWeight: FontWeight.bold)),
-            SizedBox(height: spacingSmall),
-            Card(
-                color: AppColors.lightGreen,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(cardBorderRadius),
-                    side: BorderSide(color: AppColors.primaryGreen.withOpacity(0.5))
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(cardPadding),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Credit Score', style: TextStyle(fontSize: scoreLabelFontSize, fontWeight: FontWeight.bold)),
-                      Text.rich(
-                          TextSpan(
-                              text: '70',
-                              style: TextStyle(fontSize: scoreValueFontSize, fontWeight: FontWeight.bold, color: AppColors.primaryGreen),
-                              children: [
-                                TextSpan(
-                                  text: '/100',
-                                  style: TextStyle(fontSize: scoreUnitFontSize, color: AppColors.hintColor),
-                                ),
-                              ]
-                          )
-                      )
-                    ],
-                  ),
-                )
-            ),
-            SizedBox(height: spacingMedium),
+            _buildAppBar(context),
             Expanded(
-                child: ListView(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(20.w),
+                child: Column(
                   children: [
-                    _buildHistoryItem(context, 'General Assembly', '17 Sep 2025 - 11:20 AM', '-10 credits', Colors.red),
-                    _buildHistoryItem(context, 'General Assembly', '17 Sep 2025 - 11:20 AM', '-10 credits', Colors.red),
-                    _buildHistoryItem(context, 'General Assembly', '17 Sep 2025 - 11:20 AM', '-10 credits', Colors.red),
-                    // Add more history items here
+                    _buildCreditScoreCard(),
+                    SizedBox(height: 20.h),
+                    _buildContributionHistory(),
                   ],
-                )
-            )
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHistoryItem(BuildContext context, String title, String subtitle, String amount, Color amountColor) {
-    final screenWidth = MediaQuery.of(context).size.width;
+  Widget _buildAppBar(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(12.w, 16.h, 20.w, 8.h),
+      child: Row(
+        children: [
+          IconButton(
+            icon: Icon(Icons.arrow_back, color: AppColors.primaryGreen, size: 28.sp),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          Expanded(
+            child: Text(
+              'Credit Score',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: AppColors.primaryGreen,
+                fontSize: 22.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(width: 48), // Balances the IconButton
+        ],
+      ),
+    );
+  }
 
-    // Responsive history item elements
-    double itemCardMarginBottom = screenWidth * 0.03; // ~12
-    double itemCardBorderRadius = screenWidth * 0.02; // ~8
-    double itemIconSize = screenWidth * 0.06; // ~24
-    if (itemIconSize > 28) itemIconSize = 28;
-    if (itemIconSize < 20) itemIconSize = 20;
+  Widget _buildCreditScoreCard() {
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        border: cardBorder,
+        boxShadow: cardShadow,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('Current Credit Score', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+          Text.rich(
+              TextSpan(
+                  text: '70',
+                  style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold, color: AppColors.primaryGreen),
+                  children: [
+                    TextSpan(
+                      text: '/100',
+                      style: TextStyle(fontSize: 16.sp, color: AppColors.hintColor, fontWeight: FontWeight.normal),
+                    ),
+                  ]
+              )
+          )
+        ],
+      ),
+    );
+  }
 
-    double itemTitleFontSize = screenWidth * 0.038; // ~15-16
-    if (itemTitleFontSize > 16) itemTitleFontSize = 16;
-    if (itemTitleFontSize < 13) itemTitleFontSize = 13;
+  Widget _buildContributionHistory() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        border: cardBorder,
+        boxShadow: cardShadow,
+      ),
+      child: Column(
+        children: [
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  _isHistoryExpanded = !_isHistoryExpanded;
+                });
+              },
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16.r),
+                topRight: Radius.circular(16.r),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('History', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp)),
+                    Icon(_isHistoryExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down, color: Colors.grey),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          AnimatedCrossFade(
+            firstChild: Container(),
+            secondChild: _buildHistoryTable(),
+            crossFadeState: _isHistoryExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+            duration: const Duration(milliseconds: 300),
+          )
+        ],
+      ),
+    );
+  }
 
-    double itemSubtitleFontSize = screenWidth * 0.033; // ~13-14
-    if (itemSubtitleFontSize > 14) itemSubtitleFontSize = 14;
-    if (itemSubtitleFontSize < 11) itemSubtitleFontSize = 11;
-    
-    double itemAmountFontSize = screenWidth * 0.035; // ~14
-    if (itemAmountFontSize > 15) itemAmountFontSize = 15;
-    if (itemAmountFontSize < 12) itemAmountFontSize = 12;
+  Widget _buildHistoryTable() {
+    // Dummy data
+    final List<Map<String, dynamic>> history = [
+      {'title': 'General Assembly', 'subtitle': '17 Sep 2025 - 11:20 AM', 'amount': '+10 credits', 'color': AppColors.primaryGreen},
+      {'title': 'Contribution', 'subtitle': '15 Sep 2025 - 02:45 PM', 'amount': '+5 credits', 'color': AppColors.primaryGreen},
+      {'title': 'Late Payment', 'subtitle': '12 Sep 2025 - 05:00 PM', 'amount': '-10 credits', 'color': Colors.red},
+      {'title': 'Contribution', 'subtitle': '10 Sep 2025 - 09:15 AM', 'amount': '+5 credits', 'color': AppColors.primaryGreen},
+    ];
 
+    return Padding(
+      padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 16.h),
+      child: Column(
+        children: [
+          _buildHeaderRow(),
+          const Divider(height: 1),
+          for (var item in history) ...[
+            _buildDataRow(item['title'], item['subtitle'], item['amount'], item['color']),
+            if (history.last != item) const Divider(height: 1, indent: 8, endIndent: 8),
+          ],
+        ],
+      ),
+    );
+  }
 
-    return Card(
-      margin: EdgeInsets.only(bottom: itemCardMarginBottom),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(itemCardBorderRadius)),
-      elevation: 1,
-      child: ListTile(
-        leading: Icon(Icons.groups, color: AppColors.primaryGreen, size: itemIconSize),
-        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: itemTitleFontSize)),
-        subtitle: Text(subtitle, style: TextStyle(fontSize: itemSubtitleFontSize)),
-        trailing: Text(amount, style: TextStyle(color: amountColor, fontWeight: FontWeight.bold, fontSize: itemAmountFontSize)),
+  Widget _buildHeaderRow() {
+    final headerStyle = TextStyle(color: Colors.grey, fontSize: 12.sp, fontWeight: FontWeight.bold);
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10.h),
+      child: Row(
+        children: [
+          Expanded(flex: 4, child: Text('Activity', style: headerStyle)),
+          Expanded(flex: 2, child: Text('Credits', style: headerStyle, textAlign: TextAlign.right)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDataRow(String title, String subtitle, String amount, Color amountColor) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 12.h),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 4,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp)),
+                SizedBox(height: 2.h),
+                Text(subtitle, style: TextStyle(fontSize: 12.sp, color: Colors.grey[600])),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Text(
+              amount,
+              style: TextStyle(color: amountColor, fontWeight: FontWeight.bold, fontSize: 14.sp),
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ],
       ),
     );
   }
