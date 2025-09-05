@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/constants/app_colors.dart';
 import 'package:capstone/screens/credit_score/credit_score_history_screen.dart';
-import 'package:capstone/screens/grants/available_grants_screen.dart';
 import 'package:capstone/widgets/custom_header.dart';
-import 'package:capstone/screens/contributions/contributions_screen.dart'; // <-- Import the new screen
+import 'package:capstone/screens/grants/available_grants_screen.dart';
+import 'package:capstone/screens/grant_status/grant_status.dart';
+import 'package:capstone/screens/training_and_workshop/training_and_workshop.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -27,7 +28,7 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(height: 24),
                   _buildSectionTitle('FEATURES'),
                   const SizedBox(height: 16),
-                  _buildFeaturesSection(context),
+                  _buildFeaturesSection(context), // Pass context for navigation
                   const SizedBox(height: 24),
                   _buildSectionTitle('ANNOUNCEMENTS', badge: _buildNotificationBadge('2')),
                   const SizedBox(height: 16),
@@ -46,6 +47,83 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  // (The rest of the helper methods that are not shown here are unchanged)
+
+  // --- 2. ADD THE NAVIGATION LOGIC ---
+  Widget _buildFeaturesSection(BuildContext context) {
+    return SizedBox(
+      height: 150,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          // The onTap property is passed to the "APPLY GRANT" button here
+          _buildFeatureButton(
+            iconColor: AppColors.primaryGreen,
+            icon: Icons.description_outlined,
+            label: 'APPLY GRANT\n',
+            onTap: () {
+              // This command opens the new screen
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const AvailableGrantsScreen()),
+              );
+            },
+          ),
+          const SizedBox(width: 14),
+          // Other buttons can have their own navigation later
+          _buildFeatureButton(iconColor: AppColors.primaryGreen, icon: Icons.calendar_today_outlined, label: 'TRAINING &\nWORKSHOP', onTap: () {Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const TrainingAndWorkshop()),
+          );}),
+          const SizedBox(width: 14),
+          _buildFeatureButton(iconColor: AppColors.primaryGreen, icon: Icons.checklist_rtl, label: 'VIEW STATUS\n', onTap: () {Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const GrantStatus()),
+          );}),
+          const SizedBox(width: 14),
+          _buildFeatureButton(iconColor: AppColors.primaryGreen, icon: Icons.volunteer_activism_outlined, label: 'CONTRIBUTIONS\n', onTap: () {}),
+        ],
+      ),
+    );
+  }
+
+  // --- 3. MAKE THE BUTTON TAPPABLE ---
+  // The widget is wrapped in an InkWell to handle the onTap action.
+  Widget _buildFeatureButton({required Color iconColor, required IconData icon, required String label, required VoidCallback onTap}) {
+    return SizedBox(
+      width: 110,
+      child: InkWell( // This makes the container tappable
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: AppColors.primaryGreen,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 20,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.white,
+                child: Icon(icon, color: iconColor, size: 32),
+              ),
+              const SizedBox(height: 12),
+              Text(label, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12, height: 1.2)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // --- The rest of the file remains the same ---
   List<BoxShadow> get cardShadow {
     return [
       BoxShadow(
@@ -169,72 +247,6 @@ class HomeScreen extends StatelessWidget {
       radius: 11,
       backgroundColor: AppColors.primaryGreen,
       child: Text(count, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-    );
-  }
-
-  Widget _buildFeaturesSection(BuildContext context) {
-    return SizedBox(
-      height: 150,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          _buildFeatureButton(
-            icon: Icons.description_outlined,
-            label: 'APPLY GRANT\n',
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const AvailableGrantsScreen()),
-              );
-            },
-          ),
-          const SizedBox(width: 14),
-          _buildFeatureButton(icon: Icons.calendar_today_outlined, label: 'TRAINING &\nWORKSHOP', onTap: () {}),
-          const SizedBox(width: 14),
-          _buildFeatureButton(icon: Icons.checklist_rtl, label: 'VIEW STATUS\n', onTap: () {}),
-          const SizedBox(width: 14),
-          _buildFeatureButton(
-            icon: Icons.volunteer_activism_outlined,
-            label: 'CONTRIBUTIONS\n',
-            onTap: () {
-              // This is the new navigation
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const ContributionsScreen()),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFeatureButton({required IconData icon, required String label, required VoidCallback onTap}) {
-    return SizedBox(
-      width: 110,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(
-            color: AppColors.primaryGreen,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: cardShadow,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundColor: Colors.white,
-                child: Icon(icon, color: AppColors.primaryGreen, size: 32),
-              ),
-              const SizedBox(height: 12),
-              Text(label, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12, height: 1.2)),
-            ],
-          ),
-        ),
-      ),
     );
   }
 

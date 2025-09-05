@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:capstone/constants/app_colors.dart';
 import 'package:capstone/screens/auth/login_screen.dart';
 
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
