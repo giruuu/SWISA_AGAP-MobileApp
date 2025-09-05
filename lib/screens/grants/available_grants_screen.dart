@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/constants/app_colors.dart';
-import 'package:capstone/screens/grants/view_requirements_screen.dart'; // <-- Import for navigation
+import 'package:capstone/screens/grants/view_requirements_screen.dart'; //
+import 'package:capstone/widgets/bottomsheet.dart';
 
 class AvailableGrantsScreen extends StatefulWidget {
   const AvailableGrantsScreen({super.key});
@@ -131,7 +132,11 @@ class _AvailableGrantsScreenState extends State<AvailableGrantsScreen> {
           ),
           const SizedBox(width: 8),
           TextButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              showModalBottomSheet(context: context, builder:(BuildContext context){
+                return const BottomSheetWidget();
+              });
+            },
             icon: Icon(Icons.filter_list, color: Colors.grey.shade600),
             label: Text('FILTER', style: TextStyle(color: Colors.grey.shade600)),
           ),

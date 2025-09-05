@@ -3,6 +3,8 @@ import 'package:capstone/constants/app_colors.dart';
 import 'package:capstone/screens/credit_score/credit_score_history_screen.dart';
 import 'package:capstone/widgets/custom_header.dart';
 import 'package:capstone/screens/grants/available_grants_screen.dart';
+import 'package:capstone/screens/grant_status/grant_status.dart';
+import 'package:capstone/screens/training_and_workshop/training_and_workshop.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -68,9 +70,13 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(width: 14),
           // Other buttons can have their own navigation later
-          _buildFeatureButton(iconColor: AppColors.primaryGreen, icon: Icons.calendar_today_outlined, label: 'TRAINING &\nWORKSHOP', onTap: () {}),
+          _buildFeatureButton(iconColor: AppColors.primaryGreen, icon: Icons.calendar_today_outlined, label: 'TRAINING &\nWORKSHOP', onTap: () {Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const TrainingAndWorkshop()),
+          );}),
           const SizedBox(width: 14),
-          _buildFeatureButton(iconColor: AppColors.primaryGreen, icon: Icons.checklist_rtl, label: 'VIEW STATUS\n', onTap: () {}),
+          _buildFeatureButton(iconColor: AppColors.primaryGreen, icon: Icons.checklist_rtl, label: 'VIEW STATUS\n', onTap: () {Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const GrantStatus()),
+          );}),
           const SizedBox(width: 14),
           _buildFeatureButton(iconColor: AppColors.primaryGreen, icon: Icons.volunteer_activism_outlined, label: 'CONTRIBUTIONS\n', onTap: () {}),
         ],
