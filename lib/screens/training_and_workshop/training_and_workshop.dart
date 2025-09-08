@@ -21,9 +21,9 @@ class _TrainingAndWorkshopState extends State<TrainingAndWorkshop> {
       case 'Available' :
         return const TrainingAndWorkshopAvailable(); // calls the Available content
       case 'My Events' :
-         return const TrainingAndWorkshopMyevents();
-    default:
-    return const Center(child: Text('No content to display.'));
+        return const TrainingAndWorkshopMyevents();
+      default:
+        return const Center(child: Text('No content to display.'));
     }
   }
 
@@ -34,40 +34,50 @@ class _TrainingAndWorkshopState extends State<TrainingAndWorkshop> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
-      appBar: AppBar(
-        title: Text(
-          'Training and Workshop',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: AppColors.primaryMaterialColor[300],
-            fontFamily: 'Poppins',
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: const Color(0xFFF5F5F5),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          children: [
-            SizedBox(height: 40.h),
-            GrantTabBar(
-              tabs: trainingTabs,
-              onTabSelected: (status) {
-                setState(() {
-                  _currentStatus = status;
-                });
-              },
+
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            // The main app bar that will be pinned to the top.
+            SliverAppBar(
+              elevation: 0,
+              scrolledUnderElevation: 0,
+              pinned: true,
+              title: Text(
+
+                'Training and Workshop',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primaryMaterialColor[300],
+                  fontFamily: 'Poppins',
+                ),
+              ),
+              centerTitle: true,
+              backgroundColor: const Color(0xFFF5F5F5),
             ),
-            Expanded(child: _buildContent())
-            // Example:
-            // if (_currentStatus == 'Available') {
-            //   return Text('Showing available trainings...');
-            // } else if (_currentStatus == 'Booked') {
-            //   return Text('Showing booked trainings...');
-            // }
-          ],
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                child: GrantTabBar(
+                  tabs: trainingTabs,
+                  onTabSelected: (status) {
+                    setState(() {
+                      _currentStatus = status;
+                    });
+                  },
+                ),
+              ),
+            ),
+          ];
+        },
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            children: [
+              Expanded(child: _buildContent()),
+            ],
+          ),
         ),
       ),
     );
