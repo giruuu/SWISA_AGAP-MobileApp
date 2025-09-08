@@ -118,8 +118,7 @@ class TrainingAndWorkshopAvailable extends StatelessWidget {
                               children: [
                                 SizedBox(width: 8.w),
                                 CustomButton1(
-                                  backgroundColor: AppColors.green350,
-                                  borderRadius: BorderRadius.circular(5.r),
+                                  hasBorder: true,
                                   text: 'View',
                                   width: 115.w,
                                   height: 40.h,
@@ -127,6 +126,7 @@ class TrainingAndWorkshopAvailable extends StatelessWidget {
                                   ),
                                   );
                                   },
+
                                 ),
                               ],
                             ),

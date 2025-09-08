@@ -26,10 +26,17 @@ class CustomButton1 extends StatelessWidget {
   Widget build(BuildContext context) {
     if (hasBorder) {
       return SizedBox(
-        child: TextButton(
+        height: height,
+        width: width,
+        child: OutlinedButton(
           onPressed: onPressed,
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.black,
+          style: OutlinedButton.styleFrom(
+foregroundColor: AppColors.green350,
+            side: BorderSide(color: AppColors.green350, width: 2.5),
+              shape: RoundedRectangleBorder(
+              borderRadius: borderRadius ?? BorderRadius.circular(10.r),
+
+          )
           ),
           child: Text(
             text,

@@ -126,8 +126,18 @@ class TrainingAndWorkshopDetails extends StatelessWidget {
                     height: 50.h,
                     text: 'Attend', onPressed:(){}),
                 SizedBox(height: 5.h,),
-                CustomButton1( hasBorder: true,
-                    text: 'Cancel', onPressed:(){}),
+                TextButton(onPressed: () {},
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.black,
+                      textStyle: TextStyle(
+                        fontSize: 14.sp,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                      )
+                    ),
+                    child:
+
+                Text('Cancel'))
               ],
             )
           ],

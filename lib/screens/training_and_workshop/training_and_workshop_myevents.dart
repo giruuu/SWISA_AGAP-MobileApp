@@ -144,18 +144,21 @@ class TrainingAndWorkshopMyevents extends StatelessWidget {
                             if (event.status == EventStatus.upcoming)
                               Row(
                                 children: [
-                                  CustomButton1(
-                                    borderRadius: BorderRadius.circular(5.r),
-                                    text: 'Cancel',
-                                    backgroundColor: Colors.grey,
-                                    width: 115.w,
-                                    height: 40.h,
+                                  TextButton(
                                     onPressed: () {},
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: Colors.black,
+                                      textStyle: TextStyle(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'Poppins'
+                                      )
+                                    ),
+                                    child: Text('Cancel'),
                                   ),
                                   SizedBox(width: 8.w),
                                   CustomButton1(
-                                    backgroundColor: AppColors.green350,
-                                    borderRadius: BorderRadius.circular(5.r),
+                                    hasBorder: true,
                                     text: 'View',
                                     width: 115.w,
                                     height: 40.h,
@@ -166,7 +169,7 @@ class TrainingAndWorkshopMyevents extends StatelessWidget {
                             else if (event.status == EventStatus.attended)
                               CustomButton1(
                                 backgroundColor: Colors.grey,
-                                borderRadius: BorderRadius.circular(5.r),
+
                                 text: 'Attended',
                                 width: 115.w,
                                 height: 40.h,
@@ -174,8 +177,7 @@ class TrainingAndWorkshopMyevents extends StatelessWidget {
                               )
                             else if (event.status == EventStatus.cannotCancel)
                                 CustomButton1(
-                                  backgroundColor: AppColors.green350,
-                                  borderRadius: BorderRadius.circular(5.r),
+                                hasBorder: true,
                                   text: 'View',
                                   width: 115.w,
                                   height: 40.h,
