@@ -1,8 +1,6 @@
-// In grant_status.dart
-
-import 'package:capstone/constants/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'grant_status_screen.dart'; // Import the main screen with tabs
+import 'package:capstone/constants/app_colors.dart';
+import 'package:capstone/screens/grant_status/grant_status_screen.dart';
 
 class GrantStatus extends StatelessWidget {
   const GrantStatus({super.key});
@@ -10,28 +8,25 @@ class GrantStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF5F5F5),
-        title: Text(
+        backgroundColor: Colors.grey[100],
+        elevation: 0,
+        scrolledUnderElevation: 0.0, // This removes the shadow on scroll
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.primaryGreen),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: const Text(
           'Grant Status',
           style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-            color: AppColors.primaryMaterialColor[300],
-            fontFamily: 'Poppins'
+            color: AppColors.primaryGreen,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        centerTitle: true,
       ),
-      body: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          children: [
-            SizedBox(height: 45), Expanded(child: GrantStatusScreen(),),
-          ],
-        ), // This is the main widget for your tabbed UI
-      ),
+      body: const GrantStatusScreen(),
     );
   }
 }
