@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/constants/app_colors.dart';
-import 'package:capstone/screens/grants/view_requirements_screen.dart'; //
+import 'package:capstone/screens/grants/view_requirements_screen.dart';
 import 'package:capstone/widgets/bottomsheet.dart';
 
 class AvailableGrantsScreen extends StatefulWidget {
@@ -32,7 +32,7 @@ class _AvailableGrantsScreenState extends State<AvailableGrantsScreen> {
                 itemCount: 5,
                 separatorBuilder: (context, index) => const SizedBox(height: 16),
                 itemBuilder: (context, index) {
-                  return _buildGrantCard(context); // Pass context
+                  return _buildGrantCard(context);
                 },
               ),
             ),
@@ -47,8 +47,9 @@ class _AvailableGrantsScreenState extends State<AvailableGrantsScreen> {
       padding: const EdgeInsets.fromLTRB(12, 16, 12, 0),
       child: Row(
         children: [
+          // --- BACK BUTTON UPDATED ---
           IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.primaryGreen, size: 28),
+            icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryGreen),
             onPressed: () => Navigator.of(context).pop(),
           ),
           const Expanded(
@@ -62,7 +63,7 @@ class _AvailableGrantsScreenState extends State<AvailableGrantsScreen> {
               ),
             ),
           ),
-          const SizedBox(width: 48),
+          const SizedBox(width: 48), // Balances the IconButton
         ],
       ),
     );
@@ -125,7 +126,7 @@ class _AvailableGrantsScreenState extends State<AvailableGrantsScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: AppColors.primaryGreen.withOpacity(0.1),
+              color: AppColors.primaryGreen.withAlpha(25),
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Text('Grant Type', style: TextStyle(color: AppColors.primaryGreen, fontWeight: FontWeight.bold)),
@@ -145,7 +146,7 @@ class _AvailableGrantsScreenState extends State<AvailableGrantsScreen> {
     );
   }
 
-  Widget _buildGrantCard(BuildContext context) { // Pass context
+  Widget _buildGrantCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -157,7 +158,7 @@ class _AvailableGrantsScreenState extends State<AvailableGrantsScreen> {
         children: [
           _buildLeftIcon(),
           const SizedBox(width: 12),
-          Expanded(child: _buildDetailsSection(context)), // Pass context
+          Expanded(child: _buildDetailsSection(context)),
         ],
       ),
     );
@@ -194,7 +195,7 @@ class _AvailableGrantsScreenState extends State<AvailableGrantsScreen> {
     );
   }
 
-  Widget _buildDetailsSection(BuildContext context) { // Pass context
+  Widget _buildDetailsSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -248,7 +249,6 @@ class _AvailableGrantsScreenState extends State<AvailableGrantsScreen> {
             ),
             OutlinedButton(
               onPressed: () {
-                // This is the navigation logic
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const ViewRequirementsScreen()),
                 );

@@ -28,7 +28,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
           children: <Widget>[
 
             RadioListTile<String>(
-              activeColor: AppColors.green350,
+              activeColor: AppColors.primaryGreen,
               title: Text('English', style: TextStyle(fontSize: 15.sp),),
               value: 'English',
               groupValue: _selectedLanguage,
@@ -41,7 +41,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
             ),
 
             RadioListTile<String>(
-              activeColor: AppColors.green350,
+              activeColor: AppColors.primaryGreen,
               title: Text('Tagalog', style: TextStyle(fontSize: 15.sp),),
               value: 'Tagalog',
               groupValue: _selectedLanguage,
@@ -53,7 +53,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
             ),
 
             RadioListTile<String>(
-              activeColor: AppColors.green350,
+              activeColor: AppColors.primaryGreen,
               title:  Text('Bisaya', style: TextStyle(fontSize: 15.sp),),
               value: 'Bisaya',
               groupValue: _selectedLanguage,
@@ -82,7 +82,7 @@ class _LanguageDialogState extends State<LanguageDialog> {
           onPressed: () {
             // Pop the dialog and return the selected language
             Navigator.of(context).pop(_selectedLanguage);
-          }, style: ElevatedButton.styleFrom(backgroundColor: AppColors.green350,
+          }, style: ElevatedButton.styleFrom(backgroundColor: AppColors.primaryGreen,
         shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(5.r),)
         ),
           child:  Text('Save',  style: TextStyle(fontSize: 14.sp,color: Colors.white),

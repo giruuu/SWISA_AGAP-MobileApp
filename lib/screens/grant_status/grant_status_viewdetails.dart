@@ -1,5 +1,3 @@
-// In grant_status_viewdetails.dart
-
 import 'package:flutter/material.dart';
 import 'package:capstone/constants/app_colors.dart';
 
@@ -17,13 +15,14 @@ class _ViewDetailsScreenState extends State<ViewDetailsScreen> {
       appBar: AppBar(
         title: const Text(
           'Grant Status',
-          style: TextStyle(color: AppColors.grantCardBorder),
+          style: TextStyle(color: AppColors.primaryGreen),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.grantCardBorder),
+          // --- BACK BUTTON UPDATED ---
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryGreen),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -37,7 +36,6 @@ class _ViewDetailsScreenState extends State<ViewDetailsScreen> {
               _buildGrantDetailsCard(),
               const SizedBox(height: 16),
               _buildStatusTimeline(),
-
             ],
           ),
         ),

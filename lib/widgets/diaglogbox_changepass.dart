@@ -62,7 +62,7 @@ class _ChangePassDialogState extends State<ChangePassDialog> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.r),
-                        borderSide: BorderSide(color: AppColors.grantCardBorder, width: 2.w),
+                        borderSide: BorderSide(color: AppColors.primaryGreen, width: 2.w),
                       ),
                     ),
                   ),
@@ -103,7 +103,7 @@ class _ChangePassDialogState extends State<ChangePassDialog> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.r),
-                        borderSide: BorderSide(color: AppColors.grantCardBorder, width: 2.w),
+                        borderSide: BorderSide(color: AppColors.primaryGreen, width: 2.w),
                       ),
                     ),
                   ),
@@ -175,7 +175,7 @@ class _ChangePassDialogState extends State<ChangePassDialog> {
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.green350,
+                backgroundColor: AppColors.primaryGreen,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.r),
                 ),

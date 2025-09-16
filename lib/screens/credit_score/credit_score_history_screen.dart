@@ -57,11 +57,13 @@ class _CreditScoreHistoryScreenState extends State<CreditScoreHistoryScreen> {
 
   Widget _buildAppBar(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(12.w, 16.h, 20.w, 8.h),
+      // Adjusted padding for the new icon
+      padding: EdgeInsets.fromLTRB(4.w, 16.h, 20.w, 8.h),
       child: Row(
         children: [
+          // --- BACK BUTTON UPDATED ---
           IconButton(
-            icon: Icon(Icons.arrow_back, color: AppColors.primaryGreen, size: 28.sp),
+            icon: Icon(Icons.arrow_back_ios, color: AppColors.primaryGreen, size: 24.sp),
             onPressed: () => Navigator.of(context).pop(),
           ),
           Expanded(

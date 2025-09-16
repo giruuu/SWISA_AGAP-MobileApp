@@ -13,15 +13,13 @@ class _ClaimNowScreenState extends State<ClaimNowScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Claim Grant',
-          style: TextStyle(color: AppColors.grantCardBorder),
-        ),
+        title: const Text('Claim Grant', style: TextStyle(color: AppColors.primaryGreen)),
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.grantCardBorder),
+          // --- BACK BUTTON UPDATED ---
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryGreen),
           onPressed: () {
             Navigator.of(context).pop();
           },

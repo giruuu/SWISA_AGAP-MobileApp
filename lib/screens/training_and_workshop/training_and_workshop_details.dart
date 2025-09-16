@@ -17,7 +17,7 @@ class TrainingAndWorkshopDetails extends StatelessWidget {
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: AppColors.grantCardBorder,
+            color: AppColors.primaryGreen,
           ),
         ),
         centerTitle: true,
@@ -86,14 +86,14 @@ class TrainingAndWorkshopDetails extends StatelessWidget {
                   SizedBox(height: 8.h),
                   Row(
                     children: [
-                      Icon(Icons.person_rounded, color: AppColors.green350),
+                      Icon(Icons.person_rounded, color: AppColors.primaryGreen),
                       SizedBox(width: 6.w),
                       Text(
                         '100',
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.green350,
+                          color: AppColors.primaryGreen,
                         ),
                       ),
                     ],
@@ -120,7 +120,7 @@ class TrainingAndWorkshopDetails extends StatelessWidget {
             Column(
               children: [
                 CustomButton1(
-                    backgroundColor: AppColors.green350,
+                    backgroundColor: AppColors.primaryGreen,
                     borderRadius: BorderRadius.circular(5.r),
                     width: 300.w,
                     height: 50.h,

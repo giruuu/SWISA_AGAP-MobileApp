@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/constants/app_colors.dart';
 import 'package:capstone/screens/grant_status/grant_status_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GrantStatus extends StatelessWidget {
   const GrantStatus({super.key});
@@ -12,17 +13,19 @@ class GrantStatus extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.grey[100],
         elevation: 0,
-        scrolledUnderElevation: 0.0, // This removes the shadow on scroll
+        scrolledUnderElevation: 0.0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.primaryGreen),
+          // --- BACK BUTTON UPDATED ---
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryGreen),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
+        title: Text(
           'Grant Status',
           style: TextStyle(
             color: AppColors.primaryGreen,
             fontWeight: FontWeight.bold,
+            fontSize: 22.sp,
           ),
         ),
       ),

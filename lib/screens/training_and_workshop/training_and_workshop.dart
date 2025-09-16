@@ -49,7 +49,7 @@ class _TrainingAndWorkshopState extends State<TrainingAndWorkshop> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.primaryMaterialColor[300],
+                  color: AppColors.primaryGreen,
                   fontFamily: 'Poppins',
                 ),
               ),

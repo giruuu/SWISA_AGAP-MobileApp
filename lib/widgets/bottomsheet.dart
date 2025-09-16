@@ -91,7 +91,7 @@ class BottomSheetWidget extends StatelessWidget {
             child: Column(
               children: [
                 CustomButton1(
-                  backgroundColor: AppColors.green350,
+                  backgroundColor: AppColors.primaryGreen,
                   borderRadius: BorderRadius.circular(10.r),
                   width: 300.w,
                   height: 50.h,
@@ -99,12 +99,17 @@ class BottomSheetWidget extends StatelessWidget {
                   onPressed: () {},
                 ),
                 SizedBox(height: 5.h),
-                CustomButton1(
-                  hasBorder: true,
-                  text: 'Cancel',
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                TextButton(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(
+                      foregroundColor: Colors.black,
+                      textStyle: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Poppins'
+                      )
+                  ),
+                  child: Text('Cancel'),
                 ),
               ],
             ),
@@ -119,8 +124,8 @@ class BottomSheetWidget extends StatelessWidget {
     return OutlinedButton(
       onPressed: () {},
       style: OutlinedButton.styleFrom(
-        foregroundColor: AppColors.green350,
-        side: BorderSide(color: AppColors.green350, width: 2.w),
+        foregroundColor: AppColors.primaryGreen,
+        side: BorderSide(color: AppColors.primaryGreen, width: 2.w),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(7.r),
         ),

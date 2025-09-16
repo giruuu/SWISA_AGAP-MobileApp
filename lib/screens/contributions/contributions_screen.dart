@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/constants/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ContributionsScreen extends StatefulWidget {
   const ContributionsScreen({super.key});
@@ -11,6 +12,7 @@ class ContributionsScreen extends StatefulWidget {
 class _ContributionsScreenState extends State<ContributionsScreen> {
   bool _isHistoryExpanded = true;
 
+  // Consistent shadow style from Contributions screen
   List<BoxShadow> get cardShadow {
     return [
       BoxShadow(
@@ -21,6 +23,7 @@ class _ContributionsScreenState extends State<ContributionsScreen> {
     ];
   }
 
+  // Consistent border style from Contributions screen
   Border get cardBorder {
     return Border.all(color: AppColors.primaryGreen.withOpacity(0.7), width: 1.0);
   }
@@ -35,11 +38,11 @@ class _ContributionsScreenState extends State<ContributionsScreen> {
             _buildAppBar(context),
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(20.w),
                 child: Column(
                   children: [
                     _buildContributionRatingCard(),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
                     _buildContributionHistory(),
                   ],
                 ),
@@ -53,25 +56,27 @@ class _ContributionsScreenState extends State<ContributionsScreen> {
 
   Widget _buildAppBar(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 16, 12, 0),
+      padding: EdgeInsets.fromLTRB(12.w, 16.h, 20.w, 8.h),
       child: Row(
         children: [
+          // --- BACK BUTTON UPDATED ---
           IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.primaryGreen, size: 28),
+            icon: Icon(Icons.arrow_back_ios, color: AppColors.primaryGreen, size: 24.sp),
             onPressed: () => Navigator.of(context).pop(),
           ),
-          const Expanded(
+          Expanded(
             child: Text(
               'Contributions',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: AppColors.primaryGreen,
-                fontSize: 22,
+                fontSize: 22.sp,
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Poppins',
               ),
             ),
           ),
-          const SizedBox(width: 48),
+          const SizedBox(width: 48), // Balances the IconButton
         ],
       ),
     );
@@ -79,10 +84,10 @@ class _ContributionsScreenState extends State<ContributionsScreen> {
 
   Widget _buildContributionRatingCard() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         border: cardBorder,
         boxShadow: cardShadow,
       ),
@@ -95,22 +100,21 @@ class _ContributionsScreenState extends State<ContributionsScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('CONTRIBUTION RATING', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textColor)),
-                  const SizedBox(height: 6),
+                  Text('CONTRIBUTION RATING', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp, color: AppColors.textColor)),
+                  SizedBox(height: 4.h),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                     decoration: BoxDecoration(
                       color: AppColors.primaryGreen,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
-                    child: const Text('GREAT', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+                    child: Text('GREAT', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10.sp)),
                   )
                 ],
               ),
-              // --- LOGO UPDATED: Border removed, size increased ---
               SizedBox(
-                width: 75,
-                height: 75,
+                width: 75.w,
+                height: 75.w,
                 child: ClipOval(
                   child: Image.asset(
                     'assets/images/swisa-logo-circle.png',
@@ -120,31 +124,31 @@ class _ContributionsScreenState extends State<ContributionsScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('10', style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: AppColors.primaryGreen, height: 1.0)),
-                  Text('TIMES CONTRIBUTED', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                  Text('10', style: TextStyle(fontSize: 48.sp, fontWeight: FontWeight.bold, color: AppColors.primaryGreen, height: 1.0)),
+                  Text('TIMES CONTRIBUTED', style: TextStyle(color: Colors.grey, fontSize: 12.sp)),
                 ],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Text('AJ. MARQUEZ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                  const Text('2025', style: TextStyle(color: Colors.grey, fontSize: 12)),
-                  const SizedBox(height: 6),
+                  Text('AJ. MARQUEZ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp)),
+                  Text('2025', style: TextStyle(color: Colors.grey, fontSize: 12.sp)),
+                  SizedBox(height: 6.h),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 5.h),
                     decoration: BoxDecoration(
                       color: AppColors.primaryGreen,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
-                    child: const Text('MEMBER', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+                    child: Text('MEMBER', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12.sp)),
                   )
                 ],
               )
@@ -159,7 +163,7 @@ class _ContributionsScreenState extends State<ContributionsScreen> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         border: cardBorder,
         boxShadow: cardShadow,
       ),
@@ -173,19 +177,19 @@ class _ContributionsScreenState extends State<ContributionsScreen> {
                   _isHistoryExpanded = !_isHistoryExpanded;
                 });
               },
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16.r),
+                topRight: Radius.circular(16.r),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Contribution History', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    Text('Contribution History', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp)),
                     Row(
                       children: [
-                        const Text('Jan - March, 2025', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                        Text('Jan - March, 2025', style: TextStyle(color: Colors.grey, fontSize: 12.sp)),
                         Icon(_isHistoryExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down, color: Colors.grey),
                       ],
                     )
@@ -206,6 +210,7 @@ class _ContributionsScreenState extends State<ContributionsScreen> {
   }
 
   Widget _buildHistoryTable() {
+    // Dummy data
     final List<Map<String, String>> contributions = [
       {'type': 'Cash', 'quantity': '₱100', 'date': '08/10/2025'},
       {'type': 'Crop', 'quantity': '10kg', 'date': '08/05/2025'},
@@ -218,14 +223,14 @@ class _ContributionsScreenState extends State<ContributionsScreen> {
     ];
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 16.h),
       child: Column(
         children: [
           _buildHeaderRow(),
           const Divider(height: 1),
           for (var item in contributions) ...[
             _buildDataRow(item),
-            const Divider(height: 1, indent: 8, endIndent: 8),
+            if (contributions.last != item) const Divider(height: 1, indent: 8, endIndent: 8),
           ],
         ],
       ),
@@ -233,15 +238,15 @@ class _ContributionsScreenState extends State<ContributionsScreen> {
   }
 
   Widget _buildHeaderRow() {
-    const headerStyle = TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold);
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
+    final headerStyle = TextStyle(color: Colors.grey, fontSize: 12.sp, fontWeight: FontWeight.bold);
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Row(
         children: [
           Expanded(flex: 2, child: Text('Type', style: headerStyle)),
           Expanded(flex: 2, child: Text('Quantity', style: headerStyle)),
           Expanded(flex: 3, child: Text('Date', style: headerStyle)),
-          Expanded(flex: 2, child: Text('Receipt', style: headerStyle, textAlign: TextAlign.center,)),
+          Expanded(flex: 2, child: Text('Receipt', style: headerStyle, textAlign: TextAlign.center)),
         ],
       ),
     );
@@ -249,7 +254,7 @@ class _ContributionsScreenState extends State<ContributionsScreen> {
 
   Widget _buildDataRow(Map<String, String> data) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      padding: EdgeInsets.symmetric(vertical: 12.h),
       child: Row(
         children: [
           Expanded(flex: 2, child: Text(data['type']!)),
@@ -259,12 +264,18 @@ class _ContributionsScreenState extends State<ContributionsScreen> {
             flex: 2,
             child: InkWell(
               onTap: () { /* TODO: View Receipt Logic */ },
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.visibility, color: Colors.deepPurple, size: 16),
-                  SizedBox(width: 4),
-                  Text('View File', style: TextStyle(color: Colors.deepPurple, fontSize: 12)),
+                  Icon(Icons.visibility, color: AppColors.primaryGreen, size: 16.sp),
+                  SizedBox(width: 4.w),
+                  Flexible(
+                    child: Text(
+                      'View',
+                      style: TextStyle(color: AppColors.primaryGreen, fontSize: 12.sp),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
             ),

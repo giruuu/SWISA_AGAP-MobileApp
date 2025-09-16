@@ -26,7 +26,7 @@ class FinalCheckingScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 const Text(
                   'Application Submitted',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.primaryGreen), // Title color
                 ),
                 const SizedBox(height: 12),
                 Text(
@@ -121,11 +121,12 @@ class FinalCheckingScreen extends StatelessWidget {
 
   Widget _buildAppBar(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 16, 12, 0),
+      padding: const EdgeInsets.fromLTRB(4, 16, 12, 0),
       child: Row(
         children: [
+          // --- BACK BUTTON UPDATED ---
           IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.primaryGreen, size: 28),
+            icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryGreen),
             onPressed: () => Navigator.of(context).pop(),
           ),
           const Expanded(
@@ -149,7 +150,7 @@ class FinalCheckingScreen extends StatelessWidget {
     return Text(
       title,
       style: const TextStyle(
-        color: Colors.black,
+        color: AppColors.primaryGreen, // Changed to primaryGreen
         fontWeight: FontWeight.bold,
         fontSize: 14,
       ),
@@ -162,7 +163,7 @@ class FinalCheckingScreen extends StatelessWidget {
       child: Text.rich(
         TextSpan(
           text: '$label ',
-          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12),
+          style: const TextStyle(color: AppColors.primaryGreen, fontWeight: FontWeight.bold, fontSize: 12), // Changed label color to primaryGreen
           children: [
             TextSpan(
               text: value,

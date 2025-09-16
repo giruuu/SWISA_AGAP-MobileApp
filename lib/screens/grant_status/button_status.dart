@@ -54,7 +54,7 @@ class _GrantTabBarState extends State<GrantTabBar> {
           padding: const EdgeInsets.symmetric(vertical: 12),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primaryMaterialColor[350] : Colors.transparent,
+            color: isSelected ? AppColors.primaryGreen: Colors.transparent,
             borderRadius: BorderRadius.circular(25),
           ),
           child: Text(

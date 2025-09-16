@@ -19,11 +19,9 @@ class _GrantStatusScreenState extends State<GrantStatusScreen> {
     {'name': 'GRANT NAME', 'status': 'Verifying Documents'},
     {'name': 'GRANT NAME', 'status': 'Submitted'},
   ];
-
   final List<Map<String, String>> approvedGrants = [
     {'name': 'GRANT NAME', 'status': 'Approved'},
   ];
-
   final List<Map<String, String>> deniedGrants = [
     {'name': 'GRANT NAME', 'status': 'Incorrect Documents'},
   ];
@@ -34,7 +32,6 @@ class _GrantStatusScreenState extends State<GrantStatusScreen> {
         return approvedGrants;
       case 'Denied':
         return deniedGrants;
-      case 'Pending':
       default:
         return pendingGrants;
     }
@@ -42,23 +39,15 @@ class _GrantStatusScreenState extends State<GrantStatusScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final grantTabs = ['Pending', 'Approved', 'Denied'];
-
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: GrantTabBar(
-            tabs: grantTabs,
-            onTabSelected: (status) {
-              setState(() {
-                _currentStatus = status;
-              });
-            },
+            tabs: const ['Pending', 'Approved', 'Denied'],
+            onTabSelected: (status) => setState(() => _currentStatus = status),
           ),
         ),
-        // --- LAYOUT CHANGED HERE ---
-        // This Expanded ListView makes the content below the tabs scrollable.
         Expanded(
           child: ListView(
             children: [
@@ -66,8 +55,8 @@ class _GrantStatusScreenState extends State<GrantStatusScreen> {
               _buildFilterControls(),
               const SizedBox(height: 20),
               ListView.separated(
-                physics: const NeverScrollableScrollPhysics(), // Important
-                shrinkWrap: true, // Important
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 itemCount: _currentList.length,
                 separatorBuilder: (context, index) => const SizedBox(height: 16),
@@ -80,7 +69,7 @@ class _GrantStatusScreenState extends State<GrantStatusScreen> {
                   );
                 },
               ),
-              const SizedBox(height: 20), // Padding at the bottom of the scroll
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -124,7 +113,6 @@ class _GrantStatusScreenState extends State<GrantStatusScreen> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.primaryGreen, width: 1.0),
-        // No shadow effect
       ),
       child: Row(
         children: [
@@ -156,11 +144,7 @@ class _GrantStatusScreenState extends State<GrantStatusScreen> {
           CircleAvatar(
             radius: 28,
             backgroundColor: Colors.white,
-            child: Icon(
-              Icons.check_box_outlined,
-              color: AppColors.primaryGreen,
-              size: 32,
-            ),
+            child: Icon(Icons.check_box_outlined, color: AppColors.primaryGreen, size: 32),
           ),
           SizedBox(height: 8),
           Text(
@@ -228,43 +212,27 @@ class _GrantStatusScreenState extends State<GrantStatusScreen> {
       destinationScreen = const ClaimNowScreen();
     }
 
-    // Use OutlinedButton for Pending/Denied to match the "APPLY NOW" style
-    if (statusType != 'Approved') {
-      return OutlinedButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => destinationScreen),
-          );
-        },
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primaryGreen,
-          side: const BorderSide(color: AppColors.primaryGreen, width: 1.5),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        ),
-        child: Text(
-          buttonText,
-          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
-        ),
-      );
-    } else {
-      // Use a solid ElevatedButton for "CLAIM NOW" as it's a primary action
+    if (statusType == 'Approved') {
       return ElevatedButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => destinationScreen),
-          );
-        },
+        onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => destinationScreen)),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primaryGreen,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         ),
-        child: Text(
-          buttonText,
-          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+        child: Text(buttonText, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+      );
+    } else {
+      return OutlinedButton(
+        onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => destinationScreen)),
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.primaryGreen,
+          side: const BorderSide(color: AppColors.primaryGreen, width: 1.5),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         ),
+        child: Text(buttonText, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
       );
     }
   }

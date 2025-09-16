@@ -127,7 +127,7 @@ class TrainingAndWorkshopMyevents extends StatelessWidget {
                               children: [
                                 Icon(
                                   Icons.person_rounded,
-                                  color: AppColors.green350,
+                                  color: AppColors.primaryGreen,
                                   size: 24.sp,
                                 ),
                                 SizedBox(width: 4.w),
@@ -135,7 +135,7 @@ class TrainingAndWorkshopMyevents extends StatelessWidget {
                                   '${event.attendees}',
                                   style: TextStyle(
                                     fontSize: 12.sp,
-                                    color: AppColors.grantCardBorder,
+                                    color: AppColors.primaryGreen,
                                   ),
                                 ),
                               ],

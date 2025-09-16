@@ -101,7 +101,7 @@ class TrainingAndWorkshopAvailable extends StatelessWidget {
                               children: [
                                 Icon(
                                   Icons.person_rounded,
-                                  color: AppColors.green350,
+                                  color: AppColors.primaryGreen,
                                   size: 24.sp,
                                 ),
                                 SizedBox(width: 4.w),
@@ -109,7 +109,7 @@ class TrainingAndWorkshopAvailable extends StatelessWidget {
                                   '100',
                                   style: TextStyle(
                                     fontSize: 12.sp,
-                                    color: AppColors.grantCardBorder,
+                                    color: AppColors.primaryGreen,
                                   ),
                                 ),
                               ],

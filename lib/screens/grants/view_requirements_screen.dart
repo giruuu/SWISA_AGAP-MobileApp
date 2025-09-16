@@ -199,11 +199,12 @@ class _ViewRequirementsScreenState extends State<ViewRequirementsScreen> {
 
   Widget _buildAppBar(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 16, 12, 0),
+      padding: const EdgeInsets.fromLTRB(4, 16, 12, 0),
       child: Row(
         children: [
+          // --- BACK BUTTON UPDATED ---
           IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.primaryGreen, size: 28),
+            icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryGreen),
             onPressed: () => Navigator.of(context).pop(),
           ),
           const Expanded(
@@ -217,7 +218,7 @@ class _ViewRequirementsScreenState extends State<ViewRequirementsScreen> {
               ),
             ),
           ),
-          const SizedBox(width: 48),
+          const SizedBox(width: 48), // Balances the IconButton
         ],
       ),
     );
