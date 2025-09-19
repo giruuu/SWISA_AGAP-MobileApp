@@ -30,12 +30,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # add flutter_screenutil
-  flutter_screenutil: ^5.9.3
+  # All direct dependencies of 'flutter' SDK (like http, shared_preferences)
+  # should be listed at the same indentation level as 'cupertino_icons' etc.
+  # and not nested under 'sdk: flutter'.
+
+  http: ^1.1.0
+  shared_preferences: ^2.0.15 # Removed the stray backslash here
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   image_picker: ^1.0.7
+  flutter_screenutil: ^5.9.3
+
 
 dev_dependencies:
   flutter_test:

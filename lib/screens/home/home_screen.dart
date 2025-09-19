@@ -65,7 +65,7 @@ class HomeScreen extends StatelessWidget {
             onTap: () {
               // This command opens the new screen
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const AvailableGrantsScreen()),
+                MaterialPageRoute(builder: (context) => AvailableGrantsScreen()),
               );
             },
           ),
